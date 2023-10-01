@@ -1,6 +1,9 @@
-QT       += core gui
+QT       += core gui openglwidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+# Se importa a la librería de opengl
+LIBS += -lopengl32
 
 CONFIG += c++17
 
@@ -10,10 +13,12 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    openglsimulation.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    openglsimulation.h
 
 FORMS += \
     mainwindow.ui
