@@ -5,6 +5,13 @@
 #include <QtOpenGLWidgets>
 #include <QOpenGLFunctions>
 
+#include <iostream>
+#include <Eigen/Dense>
+#include <vector>
+#include <random>
+
+#include <GL/glu.h>
+
 class OpenGLSimulation : public QOpenGLWidget, public QOpenGLFunctions
 {
     Q_OBJECT
@@ -20,7 +27,7 @@ protected:
     void resizeGL(int w, int h) override;
 private:
 
-    // Se crean funciones para normalizar el color a RGB
+    void Update(void) const;
 
     void qColorToRGB(const QColor &C, float &r, float &g, float &b) const;
     float normaliza_0_1(float val, float min, float max) const;

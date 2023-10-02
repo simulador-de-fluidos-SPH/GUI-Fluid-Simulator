@@ -3,7 +3,7 @@ QT       += core gui openglwidgets
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 # Se importa a la librería de opengl
-LIBS += -lopengl32
+LIBS += -lopengl32 -lglu32
 
 CONFIG += c++17
 
@@ -24,7 +24,7 @@ FORMS += \
     mainwindow.ui
 
 # Dirección de las librerias
-INCLUDEPATH += ./include
+ INCLUDEPATH += ./include
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
