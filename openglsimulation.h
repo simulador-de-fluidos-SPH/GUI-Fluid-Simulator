@@ -4,6 +4,7 @@
 #include <QColor>
 #include <QtOpenGLWidgets>
 #include <QOpenGLFunctions>
+#include <QDebug>
 
 #include <iostream>
 #include <Eigen/Dense>

@@ -45,20 +45,20 @@ static vector<Particle> particles;
 
 // interaction
 const static int MAX_PARTICLES = 2500;
-const static int DAM_PARTICLES = 500;
+const static int DAM_PARTICLES = 60;
 const static int BLOCK_PARTICLES = 250;
 
 // rendering projection parameters
-const static int WINDOW_WIDTH = 800;
-const static int WINDOW_HEIGHT = 600;
-const static double VIEW_WIDTH = 1.5 * 800.f;
-const static double VIEW_HEIGHT = 1.5 * 600.f;
+const static int WINDOW_WIDTH = 741;
+const static int WINDOW_HEIGHT = 411;
+const static double VIEW_WIDTH = 741;
+const static double VIEW_HEIGHT = 411;
 
 
 // función para inicializar las particulas
 void InitSPH(void)
 {
-    cout << "initializing dam break with " << DAM_PARTICLES << " particles" << endl;
+    qDebug() << "Initializing simulation with " << DAM_PARTICLES << " particles\n";
 
     // Crear un generador de números aleatorios utilizando la semilla actual del reloj
     random_device rd;
@@ -72,7 +72,7 @@ void InitSPH(void)
         {
             if (particles.size() < DAM_PARTICLES)
             {
-                cout << particles.size(); // Linea de prueba
+                // cout << particles.size() << " "; // Linea de prueba
                 // Generar un valor aleatorio en el rango [0.0, 1.0]
                 float jitter = dist(gen);
                 particles.push_back(Particle(x + jitter, y));
@@ -171,32 +171,12 @@ void ComputeForces(void)
     }
 }
 
-void OpenGLSimulation::Update(void) const
-{
-    ComputeDensityPressure();
-    ComputeForces();
-    Integrate();
-
-    //glutPostRedisplay();
-
-}
-
-/*
-void InitGL(void)
-{
-    glClearColor(0.9f, 0.9f, 0.9f, 1);
-    glEnable(GL_POINT_SMOOTH);
-    glPointSize(H / 2.f);
-    glMatrixMode(GL_PROJECTION);
-}
-*/
-
 // Inicializa el opengl
 void OpenGLSimulation::initializeGL()
 {
     float r, g, b, a = normaliza_0_1(255.0f, 1.0f, 255.0f); // Se declaran r, g, b y alfa como 1
 
-    qColorToRGB(Qt::black, r, g, b); // A la función qColor se le pasa el color negro de QColor y se modifica r, g, b
+    qColorToRGB(Qt::white, r, g, b); // A la función qColor se le pasa el color negro de QColor y se modifica r, g, b
     initializeOpenGLFunctions();
     glClearColor(r, g, b, a);
     glEnable(GL_DEPTH_TEST); // Prueba de profundidad
@@ -204,6 +184,8 @@ void OpenGLSimulation::initializeGL()
     glEnable(GL_LIGHTING); // Se activa iluminación
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
     glEnable(GL_COLOR_MATERIAL); // Se activa glColorMaterial
+
+    InitSPH();
 }
 
 
@@ -213,30 +195,28 @@ void OpenGLSimulation::paintGL()
     float r, g, b;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    ComputeDensityPressure();
+    ComputeForces();
+    Integrate();
+
+    glEnable(GL_POINT_SMOOTH);
+    glPointSize(0.02f * this->width()); // Ajusta el tamaño de los puntos a el tamaño de la pantalla
     glBegin(GL_POINTS); // Se inicializa la creación de puntos GL_POINTS
+    qColorToRGB(Qt::blue, r, g, b);
+    glColor3f(r, g, b); // Define color
+
     for (auto &p : particles)
     {
-        glVertex2f(p.x(0), p.x(1));
+        float normalizedX = p.x(0) / 741 * 2.0f - 1.0f;
+        float normalizedY = p.x(1)  / 411 * 2.0f - 1.0f;
+        // qDebug() << "p.x(0): " << normalizedX << "p.x(1): " << normalizedY << "\n" << width() << " " << height() << "\n";
+        glVertex2f(normalizedX, normalizedY);
     }
-    glEnd();
-
-//    SwapBuffers();
-
-    // glEnable(GL_POINT_SMOOTH);
-    glPointSize(30.0f);
-    glBegin(GL_POINTS);
-    qColorToRGB(Qt::yellow, r, g, b);
-    glColor3f(r, g, b); // Define color
-    glVertex2f(0.2f, 0.9f);
     glEnd();
 
     update();
 
-    glFlush();
-
-
 }
-
 
 // Esta función crea la ventana
 void OpenGLSimulation::resizeGL(int w, int h)
@@ -247,8 +227,6 @@ void OpenGLSimulation::resizeGL(int w, int h)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity(); // Carga la matriz identidad
 }
-
-
 
 // Con esta función se convierte el color de qcolor a rgb
 void OpenGLSimulation::qColorToRGB(const QColor &C, float &r, float &g, float &b) const

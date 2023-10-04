@@ -43,7 +43,40 @@ void MainWindow::toggleDockWidget()
 {
     if (ui->dockWidget->isVisible()) {
         ui->dockWidget->close();
+
+        // Restaura el tamaño
+        ui->widget->resize(this->width(), ui->widget->height());
     } else {
         ui->dockWidget->show();
+        // Modifica el tamaño del widget restandole la anchura del menú
+        ui->widget->resize(this->width() - ui->dockWidget->width(), ui->widget->height());
     }
 }
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);
+
+    // Obtiene el nuevo tamaño de la ventana
+    QSize newSize = event->size();
+
+    // qDebug() << "Tamaño de la ventana:" << newSize.width() << "x" << newSize.height();
+
+    // Variables para modificar el tamaño del widget con respecto a mainwindow
+    int newWidth;
+   // Se define como el tamaño de la ventana menos la posición y el tamaño del menú superior
+    int newHeight = newSize.height() - ui->toolBar->height() - ui->toolBar->y();
+
+    if (ui->dockWidget->isVisible()){ // Resta al tamaño total el tamaño del dockWidget
+        newWidth = this->width() - ui->dockWidget->width();
+    } else { // De lo contrario se define como el nuevo tamaño de la pantalla
+        newWidth = newSize.width();
+    }
+
+
+    // Ajusta el tamaño del QOpenGLWidget
+    ui->widget->resize(newWidth, newHeight);
+
+    ui->widget->update();
+}
+
