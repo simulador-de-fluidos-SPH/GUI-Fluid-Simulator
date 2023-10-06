@@ -10,6 +10,7 @@
 #include <Eigen/Dense>
 #include <vector>
 #include <random>
+#include <omp.h>
 
 #include <GL/glu.h>
 

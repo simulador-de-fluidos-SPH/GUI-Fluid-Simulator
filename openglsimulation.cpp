@@ -42,7 +42,7 @@ static vector<Particle> particles; // Se daclara un vector de tipo Particle llam
 
 // interaction
 const static int MAX_PARTICLES = 2500; // Particulas máximas
-const static int DAM_PARTICLES = 60; // Particulas generadas
+const static int DAM_PARTICLES = 200; // Particulas generadas
 const static int BLOCK_PARTICLES = 250; // Particulas generables por click
 
 // rendering projection parameters
@@ -52,10 +52,10 @@ const static double VIEW_WIDTH = 750;
 const static double VIEW_HEIGHT = 400;
 
 
-// función para inicializar las particulas
+// Función para inicializar las particulas
 void OpenGLSimulation::InitSPH()
 {
-    qDebug() << "Initializing simulation with " << DAM_PARTICLES << " particles\n";
+    qDebug() << "Initializing simulation with" << DAM_PARTICLES << "particles\n";
 
     // Crear un generador de números aleatorios utilizando la semilla actual del reloj
     random_device rd;
@@ -83,7 +83,7 @@ void OpenGLSimulation::InitSPH()
 
 void OpenGLSimulation::Integrate(void)
 {
-    //	#pragma omp parallel for
+        #pragma omp parallel for
     for (auto &p : particles) // Recorre las particulas del vector particles
     {
         // forward Euler integration
@@ -118,7 +118,7 @@ void OpenGLSimulation::Integrate(void)
 // Esta función calcula la densidad y la presión para cada partícula en base las particulas de su alrededor.
 void OpenGLSimulation::ComputeDensityPressure(void)
 {
-    //	#pragma omp parallel for
+        #pragma omp parallel for
     for (auto &pi : particles) // Recorre las particulas del vector particles
     {
         pi.rho = 0.f;
@@ -140,7 +140,7 @@ void OpenGLSimulation::ComputeDensityPressure(void)
 // Esta función calcula las fuerzas que actúan sobre cada partícula.
 void OpenGLSimulation::ComputeForces(void)
 {
-    //	#pragma omp parallel for
+        #pragma omp parallel for
     for (auto &pi : particles) // Recorre las particulas del vector particles
     {
         Vector2d fpress(0.f, 0.f);
@@ -195,7 +195,7 @@ void OpenGLSimulation::paintGL()
     ComputeForces();
     Integrate();
 
-    glEnable(GL_POINT_SMOOTH); // le da forma circular a los puntos
+    glEnable(GL_POINT_SMOOTH); // Le da forma circular a los puntos
     // glPointSize(0.02f * this->width()); // Ajusta el tamaño de los puntos a el tamaño del openGLWidget
     glPointSize(H); // Ajusta el tamaño de los puntos a H
 
