@@ -11,7 +11,7 @@ using namespace Eigen;
 
 // "Particle-Based Fluid Simulation for Interactive Applications" by Müller et al.
 // solver parameters
-const static Vector2d G(0.f, -10.f);   // external (gravitational) forces
+const static Vector2d G(0.f, -9.8f);   // external (gravitational) forces
 const static float REST_DENS = 300.f;  // rest density
 const static float GAS_CONST = 2000.f; // const for equation of state
 const static float H = 16.f;		   // kernel radius
@@ -27,36 +27,33 @@ const static float SPIKY_GRAD = -10.f / (M_PI * pow(H, 5.f));
 const static float VISC_LAP = 40.f / (M_PI * pow(H, 5.f));
 
 // simulation parameters
-const static float EPS = H; // boundary epsilon
-const static float BOUND_DAMPING = -0.5f;
+const static float EPS = H / 2; // Será la distancia de colición de la particula con los bordes
+const static float BOUND_DAMPING = -0.5f; // variable que modificará la dirección de velocidad cuando la particula toca un borde, al ser menor que 1 esta disminuye en magnitud
 
-// particle data structure
-// stores position, velocity, and force for integration
-// stores density (rho) and pressure values for SPH
-struct Particle
-{
-    Particle(float _x, float _y) : x(_x, _y), v(0.f, 0.f), f(0.f, 0.f), rho(0), p(0.f) {}
-    Vector2d x, v, f;
-    float rho, p;
-};
+    struct Particle
+    {
+        Particle(float _x, float _y) : x(_x, _y), v(0.f, 0.f), f(0.f, 0.f), rho(0), p(0.f) {} // particle data structure
+        Vector2d x, v, f; // stores position, velocity, and force for integration
+        float rho, p; // stores density (rho) and pressure values for SPH
+    };
 
 // solver data
-static vector<Particle> particles;
+static vector<Particle> particles; // Se daclara un vector de tipo Particle llamado particles
 
 // interaction
-const static int MAX_PARTICLES = 2500;
-const static int DAM_PARTICLES = 60;
-const static int BLOCK_PARTICLES = 250;
+const static int MAX_PARTICLES = 2500; // Particulas máximas
+const static int DAM_PARTICLES = 60; // Particulas generadas
+const static int BLOCK_PARTICLES = 250; // Particulas generables por click
 
 // rendering projection parameters
-const static int WINDOW_WIDTH = 741;
-const static int WINDOW_HEIGHT = 411;
-const static double VIEW_WIDTH = 741;
-const static double VIEW_HEIGHT = 411;
+const static int WINDOW_WIDTH = 750;
+const static int WINDOW_HEIGHT = 400;
+const static double VIEW_WIDTH = 750;
+const static double VIEW_HEIGHT = 400;
 
 
 // función para inicializar las particulas
-void InitSPH(void)
+void OpenGLSimulation::InitSPH()
 {
     qDebug() << "Initializing simulation with " << DAM_PARTICLES << " particles\n";
 
@@ -64,18 +61,17 @@ void InitSPH(void)
     random_device rd;
     mt19937 gen(rd());
 
-    uniform_real_distribution<float> dist(0.0f, 1.0f);
+    uniform_real_distribution<float> dist(0.0f, 1.0f); // Establece el rango de generación de los números aleatorios
 
-    for (float y = EPS; y < VIEW_HEIGHT - EPS * 2.f; y += H)
+    // Ambos for loop sirven para controlar donde aparecen las particulas en el plano
+    for (float y = EPS; y < VIEW_HEIGHT - EPS * 2.f; y += H) // Posición del conjunto de particulas en y
     {
-        for (float x = VIEW_WIDTH / 4; x <= VIEW_WIDTH / 2; x += H)
+        for (float x = VIEW_WIDTH / 4; x <= VIEW_WIDTH / 2; x += H) // Posición del conjunto de particulas en x
         {
-            if (particles.size() < DAM_PARTICLES)
+            if (particles.size() < DAM_PARTICLES) // Verifica si la cantidad de particulas es menor que DAM_PARTICLES
             {
-                // cout << particles.size() << " "; // Linea de prueba
-                // Generar un valor aleatorio en el rango [0.0, 1.0]
-                float jitter = dist(gen);
-                particles.push_back(Particle(x + jitter, y));
+                float jitter = dist(gen); // Generar un valor aleatorio en el rango [0.0, 1.0] para introducir una variación de posición
+                particles.push_back(Particle(x + jitter, y)); // Se crea un nuevo Particle y se añade al vector particles (x + jitter introduce la variación en x)
             }
             else
             {
@@ -85,44 +81,45 @@ void InitSPH(void)
     }
 }
 
-void Integrate(void)
+void OpenGLSimulation::Integrate(void)
 {
     //	#pragma omp parallel for
-    for (auto &p : particles)
+    for (auto &p : particles) // Recorre las particulas del vector particles
     {
         // forward Euler integration
         p.v += DT * p.f / p.rho;
         p.x += DT * p.v;
 
-        // enforce boundary conditions
-        if (p.x(0) - EPS < 0.f)
+        // Condiciones de las particulas al llegar a los bordes
+        if (p.x(0) - EPS < 0.f) // Colición cor borde izquierdo
         {
-            p.v(0) *= BOUND_DAMPING;
-            p.x(0) = EPS;
+            p.v(0) *= BOUND_DAMPING; /* Las componentes (x, y) del vector v se multiplican por el escalar BOUND_DAMPING.
+            Si BOUND_DAMPING = -0.5 y v = (x, y) entonces v*BOUND_DAMPING = (-0.5x, -0.5y) */
+            p.x(0) = EPS; // Posición x = tamaño de EPS, toca el borde izquierdo
         }
-        if (p.x(0) + EPS > VIEW_WIDTH)
+        if (p.x(0) + EPS > VIEW_WIDTH) // Colición con borde derecho
         {
-            p.v(0) *= BOUND_DAMPING;
-            p.x(0) = VIEW_WIDTH - EPS;
+            p.v(0) *= BOUND_DAMPING; // Definición anterior
+            p.x(0) = VIEW_WIDTH - EPS; // Posición x = ancho de la ventana menos EPS
         }
-        if (p.x(1) - EPS < 0.f)
+        if (p.x(1) - EPS < 0.f) // Colición con borde inferior
         {
-            p.v(1) *= BOUND_DAMPING;
-            p.x(1) = EPS;
+            p.v(1) *= BOUND_DAMPING; // Definición anterior
+            p.x(1) = EPS; // Posición y = tamaño de EPS, toca el borde inferior
         }
-        if (p.x(1) + EPS > VIEW_HEIGHT)
+        if (p.x(1) + EPS > VIEW_HEIGHT) // Colición con borde superior
         {
-            p.v(1) *= BOUND_DAMPING;
-            p.x(1) = VIEW_HEIGHT - EPS;
+            p.v(1) *= BOUND_DAMPING; // Definición anterior
+            p.x(1) = VIEW_HEIGHT - EPS; // Posición y = altura de la ventana menos EPS
         }
     }
 }
 
 // Esta función calcula la densidad y la presión para cada partícula en base las particulas de su alrededor.
-void ComputeDensityPressure(void)
+void OpenGLSimulation::ComputeDensityPressure(void)
 {
     //	#pragma omp parallel for
-    for (auto &pi : particles)
+    for (auto &pi : particles) // Recorre las particulas del vector particles
     {
         pi.rho = 0.f;
         for (auto &pj : particles)
@@ -141,10 +138,10 @@ void ComputeDensityPressure(void)
 }
 
 // Esta función calcula las fuerzas que actúan sobre cada partícula.
-void ComputeForces(void)
+void OpenGLSimulation::ComputeForces(void)
 {
     //	#pragma omp parallel for
-    for (auto &pi : particles)
+    for (auto &pi : particles) // Recorre las particulas del vector particles
     {
         Vector2d fpress(0.f, 0.f);
         Vector2d fvisc(0.f, 0.f);
@@ -177,15 +174,13 @@ void OpenGLSimulation::initializeGL()
     float r, g, b, a = normaliza_0_1(255.0f, 1.0f, 255.0f); // Se declaran r, g, b y alfa como 1
 
     qColorToRGB(Qt::white, r, g, b); // A la función qColor se le pasa el color negro de QColor y se modifica r, g, b
-    initializeOpenGLFunctions();
-    glClearColor(r, g, b, a);
-    glEnable(GL_DEPTH_TEST); // Prueba de profundidad
-    glEnable(GL_LIGHT0); // Se activa la luz
-    glEnable(GL_LIGHTING); // Se activa iluminación
-    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-    glEnable(GL_COLOR_MATERIAL); // Se activa glColorMaterial
+    initializeOpenGLFunctions(); // Prepara el progrmaa para ejecutar funciones de openGL
+    glClearColor(r, g, b, a); // Establece el color de fondo de la ventana
+    glEnable(GL_DEPTH_TEST); // Función para determinar si un obejto se dibuja delante o detras de otro
+    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE); // Configura como se aplica el color a los objetos
+    glEnable(GL_COLOR_MATERIAL); // Habilita la capacidad de controlar los colores
 
-    InitSPH();
+    InitSPH(); // Se crean las parituclas de la simulación
 }
 
 
@@ -193,27 +188,34 @@ void OpenGLSimulation::initializeGL()
 void OpenGLSimulation::paintGL()
 {
     float r, g, b;
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Borra los pixeles de la pantalla estableciendolos a el color definido en glClearColor
 
+    // Se llaman las funciones de cálculo de nueva posición
     ComputeDensityPressure();
     ComputeForces();
     Integrate();
 
-    glEnable(GL_POINT_SMOOTH);
-    glPointSize(0.02f * this->width()); // Ajusta el tamaño de los puntos a el tamaño de la pantalla
-    glBegin(GL_POINTS); // Se inicializa la creación de puntos GL_POINTS
-    qColorToRGB(Qt::blue, r, g, b);
-    glColor3f(r, g, b); // Define color
+    glEnable(GL_POINT_SMOOTH); // le da forma circular a los puntos
+    // glPointSize(0.02f * this->width()); // Ajusta el tamaño de los puntos a el tamaño del openGLWidget
+    glPointSize(H); // Ajusta el tamaño de los puntos a H
 
-    for (auto &p : particles)
+    glBegin(GL_POINTS); // Se inicializa la creación de puntos GL_POINTS
+    qColorToRGB(Qt::blue, r, g, b); // Se convierte el color blue de QT a rgb
+    glColor3f(r, g, b); // Define el color de los puntos
+
+    // Ciclo for que renderiza las particulas
+    for (auto &p : particles) // Recorre las particulas del vector particles
     {
-        float normalizedX = p.x(0) / 741 * 2.0f - 1.0f;
-        float normalizedY = p.x(1)  / 411 * 2.0f - 1.0f;
+        // Se normaliza la posición de las particulas en un espacio x[-1.0, 1.0] y[-1.0, 1.0]
+        float norX = p.x(0) / 375.0f - 1.0f; // Coordenada x partida de 1/2 de VIEW_WIDTH menos 1
+        float norY = p.x(1)  / 200.0f - 1.0f; // Coordenada y partida de 1/2 de VIEW_HEIGHT menos 1
+        glVertex2f(norX, norY); // Se muestra el vector normalizado en coordenadas norx nory
         // qDebug() << "p.x(0): " << normalizedX << "p.x(1): " << normalizedY << "\n" << width() << " " << height() << "\n";
-        glVertex2f(normalizedX, normalizedY);
     }
     glEnd();
 
+    // un update() es equivalente a un fotograma
+    // update() Reinicia la función paintGL(), pausar basta con evitar la ejecución de update()
     update();
 
 }
@@ -221,9 +223,8 @@ void OpenGLSimulation::paintGL()
 // Esta función crea la ventana
 void OpenGLSimulation::resizeGL(int w, int h)
 {
-    glViewport(0, 0, w, h);
+    glViewport(0, 0, w, h); // Se establece una ventana esquina inferior izquierda en (0, 0) con ancho y alto del widget
     glMatrixMode(GL_PROJECTION); // Carga la proyección
-    glLoadIdentity();
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity(); // Carga la matriz identidad
 }
@@ -237,6 +238,7 @@ void OpenGLSimulation::qColorToRGB(const QColor &C, float &r, float &g, float &b
     b = normaliza_0_1(C.blue(), 1.0f, 255.0f);
 }
 
+// Funciónn auxiliar para normalizar color
 float OpenGLSimulation::normaliza_0_1(float val, float min, float max) const
 {
     return (val - min) / (max - min);

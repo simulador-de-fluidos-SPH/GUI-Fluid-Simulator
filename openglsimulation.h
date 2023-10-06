@@ -22,13 +22,17 @@ public:
     // Se definen cabezeras de funciones
 
 protected:
-    // Se redefinen las funcioines por defecto de qt
+    // Se redefinen las funciones por defecto de qt
     void initializeGL() override;
     void paintGL() override;
     void resizeGL(int w, int h) override;
 private:
 
-    void Update(void) const;
+    void InitSPH();
+    void ComputeForces();
+    void ComputeDensityPressure();
+    void Integrate();
+
 
     void qColorToRGB(const QColor &C, float &r, float &g, float &b) const;
     float normaliza_0_1(float val, float min, float max) const;

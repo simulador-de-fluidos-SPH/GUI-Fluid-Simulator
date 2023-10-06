@@ -63,6 +63,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     // qDebug() << "Tamaño de la ventana:" << newSize.width() << "x" << newSize.height();
 
     // Variables para modificar el tamaño del widget con respecto a mainwindow
+
     int newWidth;
    // Se define como el tamaño de la ventana menos la posición y el tamaño del menú superior
     int newHeight = newSize.height() - ui->toolBar->height() - ui->toolBar->y();
@@ -72,7 +73,6 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     } else { // De lo contrario se define como el nuevo tamaño de la pantalla
         newWidth = newSize.width();
     }
-
 
     // Ajusta el tamaño del QOpenGLWidget
     ui->widget->resize(newWidth, newHeight);
