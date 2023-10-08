@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/new/images">
+        <file>Images/Borrar.png</file>
+        <file>Images/Expansion.png</file>
+        <file>Images/Lanzar.png</file>
+        <file>Images/Logo.png</file>
+        <file>Images/Objeto.png</file>
+        <file>Images/Pausar.png</file>
+        <file>Images/Restart.png</file>
+        <file>Images/Start.png</file>
+        <file>Images/Menu.jpg</file>
+    </qresource>
+</RCC>

@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setWindowTitle("Fluid Simulator");
 
-    QIcon icon("C:/Users/DAYANA RIOS CORTES/OneDrive/Documentos/Universidad/Semestre II/Fisica I/Project/logo.png");
+    QIcon icon(":/new/images/Images/Logo.png");
     setWindowIcon(icon);
 
     // Establecer el tamaño mínimo del QDockWidget
@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     QAction * actionMenu = new QAction("Menu", this);
     connect(actionMenu, &QAction::triggered, this, &MainWindow::toggleDockWidget);
 
-    QIcon icon2("C:/Users/DAYANA RIOS CORTES/OneDrive/Documentos/Universidad/Semestre II/Fisica I/Project/Menu.jpg");  // Reemplaza con la ruta correcta de tu ícono
+    QIcon icon2(":/new/images/Images/Menu.jpg");  // Reemplaza con la ruta correcta de tu ícono
 
     QSize iconSize(64, 64);  // Tamaño deseado del ícono
     QIcon scaledIcon = icon2.pixmap(iconSize);

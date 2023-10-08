@@ -92,8 +92,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>../Universidad/Semestre II/Fisica I/Project/lanzar.png</normaloff>../Universidad/Semestre II/Fisica I/Project/lanzar.png</iconset>
+      <iconset resource="images.qrc">
+       <normaloff>:/new/images/Images/Lanzar.png</normaloff>:/new/images/Images/Lanzar.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -147,8 +147,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>../Universidad/Semestre II/Fisica I/Project/Object.png</normaloff>../Universidad/Semestre II/Fisica I/Project/Object.png</iconset>
+      <iconset resource="images.qrc">
+       <normaloff>:/new/images/Images/Objeto.png</normaloff>:/new/images/Images/Objeto.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -174,8 +174,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>../Universidad/Semestre II/Fisica I/Project/expansion.png</normaloff>../Universidad/Semestre II/Fisica I/Project/expansion.png</iconset>
+      <iconset resource="images.qrc">
+       <normaloff>:/new/images/Images/Expansion.png</normaloff>:/new/images/Images/Expansion.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -201,8 +201,8 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>../Universidad/Semestre II/Fisica I/Project/Borrar.png</normaloff>../Universidad/Semestre II/Fisica I/Project/Borrar.png</iconset>
+      <iconset resource="images.qrc">
+       <normaloff>:/new/images/Images/Borrar.png</normaloff>:/new/images/Images/Borrar.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -502,8 +502,8 @@ background-color: rgb(255, 226, 137);</string>
   </widget>
   <action name="actionRestar">
    <property name="icon">
-    <iconset>
-     <normaloff>../Universidad/Semestre II/Fisica I/Project/Restart.jpeg</normaloff>../Universidad/Semestre II/Fisica I/Project/Restart.jpeg</iconset>
+    <iconset resource="images.qrc">
+     <normaloff>:/new/images/Images/Restart.png</normaloff>:/new/images/Images/Restart.png</iconset>
    </property>
    <property name="text">
     <string>Restart</string>
@@ -511,8 +511,8 @@ background-color: rgb(255, 226, 137);</string>
   </action>
   <action name="actionPause">
    <property name="icon">
-    <iconset>
-     <normaloff>../Universidad/Semestre II/Fisica I/Project/pause.jpeg</normaloff>../Universidad/Semestre II/Fisica I/Project/pause.jpeg</iconset>
+    <iconset resource="images.qrc">
+     <normaloff>:/new/images/Images/Pausar.png</normaloff>:/new/images/Images/Pausar.png</iconset>
    </property>
    <property name="text">
     <string>Pause</string>
@@ -520,8 +520,8 @@ background-color: rgb(255, 226, 137);</string>
   </action>
   <action name="actionStart">
    <property name="icon">
-    <iconset>
-     <normaloff>../Universidad/Semestre II/Fisica I/Project/Play.jpeg</normaloff>../Universidad/Semestre II/Fisica I/Project/Play.jpeg</iconset>
+    <iconset resource="images.qrc">
+     <normaloff>:/new/images/Images/Start.png</normaloff>:/new/images/Images/Start.png</iconset>
    </property>
    <property name="text">
     <string>Start</string>
@@ -536,6 +536,8 @@ background-color: rgb(255, 226, 137);</string>
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
  <connections/>
 </ui>
