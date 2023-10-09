@@ -2,17 +2,24 @@
 #define OPENGLSIMULATION_H
 
 #include <QColor>
+
+//######################## Arch / Windows ########################
+#if defined(Q_OS_LINUX)
+#include <QOpenGLWidget>
+#elif defined(Q_OS_WINDOWS)
 #include <QtOpenGLWidgets>
+#endif
+
 #include <QOpenGLFunctions>
 #include <QDebug>
+#include <QMouseEvent>
+#include <QPointF>
 
 #include <iostream>
 #include <Eigen/Dense>
 #include <vector>
 #include <random>
 #include <omp.h>
-
-#include <GL/glu.h>
 
 class OpenGLSimulation : public QOpenGLWidget, public QOpenGLFunctions
 {
@@ -29,11 +36,14 @@ protected:
     void resizeGL(int w, int h) override;
 private:
 
+    // Simulación
     void InitSPH();
     void ComputeForces();
     void ComputeDensityPressure();
     void Integrate();
 
+    // Heramientas
+    void mousePressEvent(QMouseEvent *e);
 
     void qColorToRGB(const QColor &C, float &r, float &g, float &b) const;
     float normaliza_0_1(float val, float min, float max) const;

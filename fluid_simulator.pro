@@ -1,10 +1,21 @@
-QT       += core gui openglwidgets
+QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 QMAKE_CXXFLAGS += -fopenmp
-# Se importa a la librería de opengl
-LIBS += -lopengl32 -lglu32 -fopenmp
+LIBS += -fopenmp
+
+## LINUX ##
+unix {
+    QT += widgets
+}
+
+## WINDOWS ###
+win32 {
+    QT += openglwidgets
+    LIBS += -lopengl32
+}
+
 
 CONFIG += c++17
 

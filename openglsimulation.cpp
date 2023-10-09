@@ -3,7 +3,7 @@
 OpenGLSimulation::OpenGLSimulation(QWidget *parent)
     :QOpenGLWidget { parent }
 {
-
+    setMouseTracking(true); // Se habilita la seguimiento del ratón
 }
 
 using namespace std;
@@ -40,16 +40,19 @@ const static float BOUND_DAMPING = -0.5f; // variable que modificará la direcci
 // solver data
 static vector<Particle> particles; // Se daclara un vector de tipo Particle llamado particles
 
+// Puntero que almacenará la dirección de memoria de una particula
+Particle* particlePointer = nullptr;
+
 // interaction
 const static int MAX_PARTICLES = 2500; // Particulas máximas
-const static int DAM_PARTICLES = 200; // Particulas generadas
+const static int DAM_PARTICLES = 100; // Particulas generadas
 const static int BLOCK_PARTICLES = 250; // Particulas generables por click
 
 // rendering projection parameters
-const static int WINDOW_WIDTH = 750;
-const static int WINDOW_HEIGHT = 400;
-const static double VIEW_WIDTH = 750;
-const static double VIEW_HEIGHT = 400;
+int WINDOW_WIDTH = 750;
+int WINDOW_HEIGHT = 400;
+double VIEW_WIDTH = 750;
+double VIEW_HEIGHT = 400;
 
 
 // Función para inicializar las particulas
@@ -196,6 +199,7 @@ void OpenGLSimulation::paintGL()
     Integrate();
 
     glEnable(GL_POINT_SMOOTH); // Le da forma circular a los puntos
+
     // glPointSize(0.02f * this->width()); // Ajusta el tamaño de los puntos a el tamaño del openGLWidget
     glPointSize(H); // Ajusta el tamaño de los puntos a H
 
@@ -206,12 +210,22 @@ void OpenGLSimulation::paintGL()
     // Ciclo for que renderiza las particulas
     for (auto &p : particles) // Recorre las particulas del vector particles
     {
-        // Se normaliza la posición de las particulas en un espacio x[-1.0, 1.0] y[-1.0, 1.0]
-        float norX = p.x(0) / 375.0f - 1.0f; // Coordenada x partida de 1/2 de VIEW_WIDTH menos 1
-        float norY = p.x(1)  / 200.0f - 1.0f; // Coordenada y partida de 1/2 de VIEW_HEIGHT menos 1
-        glVertex2f(norX, norY); // Se muestra el vector normalizado en coordenadas norx nory
-        // qDebug() << "p.x(0): " << normalizedX << "p.x(1): " << normalizedY << "\n" << width() << " " << height() << "\n";
+        if(particlePointer == &p){
+            qColorToRGB(Qt::yellow, r, g, b); // Se convierte el color blue de QT a rgb
+            glColor3f(r, g, b); // Define el color de los puntos
+            glVertex2f(p.x(0), p.x(1)); // Se muestra el vector normalizado en coordenadas norx nory
+            qColorToRGB(Qt::blue, r, g, b); // Se convierte el color blue de QT a rgb
+            glColor3f(r, g, b); // Define el color de los puntos
+        } else {
+            glVertex2f(p.x(0), p.x(1)); // Se muestra el vector normalizado en coordenadas norx nory
+        }
+        // qDebug() << "p.x(0): " << norX << "p.x(1): " << norY << "\n" << width() << " " << height() << "\n";
     }
+    glEnd();
+
+    glBegin(GL_POINTS);
+    qColorToRGB(Qt::yellow, r, g, b); // Se convierte el color blue de QT a rgb
+    glColor3f(r, g, b); // Define el color de los puntos
     glEnd();
 
     // un update() es equivalente a un fotograma
@@ -227,6 +241,52 @@ void OpenGLSimulation::resizeGL(int w, int h)
     glMatrixMode(GL_PROJECTION); // Carga la proyección
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity(); // Carga la matriz identidad
+
+    /* ################# Bounding interaction implementation #################
+    WINDOW_WIDTH = w;
+    WINDOW_HEIGHT = h;
+    VIEW_WIDTH =  static_cast<double>(w);
+    VIEW_HEIGHT =  static_cast<double>(h);
+    */
+
+    glOrtho(0.0, VIEW_WIDTH, 0.0, VIEW_HEIGHT, -1.0, 1.0); // Configura la cámara para que apunte y tenga el tamaño del openGLWidget
+
+}
+
+// Función que se ejecutará cada que el mouse es presionado
+void OpenGLSimulation::mousePressEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::LeftButton) // Verifica que se hizo clic con el botón izquierdo del ratón
+    {
+
+        float minDiff = H; // Minima diferencia para que la selección sea valida
+
+        // ################# Arch / Windows #################
+        #if defined(Q_OS_LINUX)
+        QPointF positionElement = e->localPos();
+        #elif defined(Q_OS_WINDOWS)
+        QPointF positionElement = e->position();
+        #endif
+
+        float positionx = positionElement.x() * WINDOW_WIDTH / width(); // Se encuentra y normaliza la coordenada x
+        float positiony = (height() - positionElement.y()) * VIEW_HEIGHT / height(); // Se encuentra y normaliza la coordenada y
+        Vector2d pos(positionx, positiony); // Se define un vector con lo antes encontrado
+
+        for (auto &p : particles){
+
+            if((p.x - pos).norm() <= H && (p.x - pos).norm() < minDiff) // Pregunra si la norma del vector entr pos y particle es menor a el radio del kernel
+            {
+                minDiff = (p.x - pos).norm();
+                particlePointer = &p;
+            }
+
+        }
+        if(particlePointer != nullptr) // Se pregunta si el puntero tiene algún valor diferente a null
+        {
+            cout << particlePointer << endl;
+        }
+    }
+
 }
 
 // Con esta función se convierte el color de qcolor a rgb

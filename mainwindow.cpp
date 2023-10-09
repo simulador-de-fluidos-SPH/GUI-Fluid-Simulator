@@ -58,7 +58,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     QMainWindow::resizeEvent(event);
 
     // Obtiene el nuevo tamaño de la ventana
-    QSize newSize = event->size();
+    QSize newSize = event->QResizeEvent::size();
 
     // qDebug() << "Tamaño de la ventana:" << newSize.width() << "x" << newSize.height();
 
