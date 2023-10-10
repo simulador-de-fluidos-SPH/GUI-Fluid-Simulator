@@ -42,8 +42,10 @@ private:
     void ComputeDensityPressure();
     void Integrate();
 
-    // Heramientas
+    // Funciones de heramientas
+    void* selectParticle(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);
+    void deleteParticle(QMouseEvent *e);
 
     void qColorToRGB(const QColor &C, float &r, float &g, float &b) const;
     float normaliza_0_1(float val, float min, float max) const;
