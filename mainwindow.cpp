@@ -43,13 +43,11 @@ void MainWindow::toggleDockWidget()
 {
     if (ui->dockWidget->isVisible()) {
         ui->dockWidget->close();
-
-        // Restaura el tamaño
-        ui->widget->resize(this->width(), ui->widget->height());
+        ui->widget->resize(this->width(), ui->widget->height()); // Restaura el tamaño del widget
     } else {
         ui->dockWidget->show();
-        // Modifica el tamaño del widget restandole la anchura del menú
-        ui->widget->resize(this->width() - ui->dockWidget->width(), ui->widget->height());
+        ui->widget->resize(this->width() - ui->dockWidget->width(), ui->widget->height()); // Modifica el tamaño del widget restandole la anchura del menú
+        ui->monitor->update(); // Reinicializa el monitor al abrir
     }
 }
 

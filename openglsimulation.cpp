@@ -40,8 +40,8 @@ const static float BOUND_DAMPING = -0.5f; // variable que modificará la direcci
 // solver data
 static vector<Particle> particles; // Se daclara un vector de tipo Particle llamado particles
 
-// Puntero que almacenará la dirección de memoria de una particula
-Particle* particlePointer = nullptr;
+Particle* particlePointer = nullptr; // Puntero que almacenará la dirección de memoria de una particula
+bool particleSelected = false; // Variable que sabe si hay una particula seleccionada o no
 
 // interaction
 const static int MAX_PARTICLES = 2500; // Particulas máximas
@@ -166,7 +166,7 @@ void OpenGLSimulation::ComputeForces(void)
                 fvisc += VISC * MASS * (pj.v - pi.v) / pj.rho * VISC_LAP * (H - r);
             }
         }
-        Vector2d fgrav = G * MASS / pi.rho;
+        Vector2d fgrav = G * MASS / pi.rho; // Fuerza de gravedad * masa partido entre densidad
         pi.f = fpress + fvisc + fgrav;
     }
 }
@@ -261,12 +261,13 @@ void OpenGLSimulation::mousePressEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton) // Verifica que se hizo clic con el botón izquierdo del ratón
     {
         // --------- FUNCIONES DE AL CLICKER --------- //
-        particlePointer = (Particle*)selectParticle(e); // Se define particlePointer como la dirección de memoria de la particula seleccionado
-        deleteParticle(e);
+        particlePointerSetter(e);
+
+        //deleteParticle(e);
     }
 }
 
-// Función para seleccionar una particula y devuelve la dirección de memoria de la particula seleccionada
+// Función para seleccionar una particula y devuelve la dirección de memoria de la particula seleccionada como dirección void no Particle
 void* OpenGLSimulation::selectParticle(QMouseEvent *e){
 
     // ################# Arch / Windows #################
@@ -276,7 +277,7 @@ void* OpenGLSimulation::selectParticle(QMouseEvent *e){
     QPointF positionElement = e->position();
 #endif
 
-    Particle* localPointer;
+    Particle* localPointer = nullptr;
 
     float minDiff = H; // Minima diferencia para que la selección sea valida
     float positionx = positionElement.x() * WINDOW_WIDTH / width(); // Se encuentra y normaliza la coordenada x
@@ -305,11 +306,26 @@ void OpenGLSimulation::deleteParticle(QMouseEvent *e){
         if (&(*it) == localPointer) {
             particles.erase(it); // Elimina la partícula cuando la encuentra
             if(localPointer == particlePointer){ // En caso de que la particula eliminada sea la seleccionada globalmente el puntero se volverá null
+                particleSelected = false;
                 particlePointer = nullptr;
             }
             break;
         }
     }
+}
+
+// Función para asignarle a la variable global particlePointer la particula tocada o null si no fue tocada una particula
+void OpenGLSimulation::particlePointerSetter(QMouseEvent *e){
+
+    Particle* localPointer = (Particle*)selectParticle(e);
+
+    if(localPointer == nullptr){
+        particleSelected = false;
+    } else {
+        particleSelected = true;
+    }
+
+    particlePointer = localPointer;
 }
 
 // -------------------------------------------- COLORS -------------------------------------------- //

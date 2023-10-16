@@ -26,11 +26,13 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    openglsimulation.cpp
+    openglsimulation.cpp \
+    particlemonitor.cpp
 
 HEADERS += \
     mainwindow.h \
-    openglsimulation.h
+    openglsimulation.h \
+    particlemonitor.h
 
 FORMS += \
     mainwindow.ui
