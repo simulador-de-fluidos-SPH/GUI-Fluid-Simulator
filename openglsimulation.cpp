@@ -43,9 +43,11 @@ static vector<Particle> particles; // Se daclara un vector de tipo Particle llam
 
 
 // ------------------------------ Variables Globales ------------------------------ //
+
 Particle* particlePointer = nullptr; // Puntero que almacenará la dirección de memoria de una particula
 bool particleSelected = false; // Variable que sabe si hay una particula seleccionada o no
-int fps = 0;
+int fps = 0; // Contador de fps
+time_t timer = time(0);
 extern Ui::MainWindow* globalUi;
 
 // interaction
@@ -233,8 +235,13 @@ void OpenGLSimulation::paintGL()
     glColor3f(r, g, b); // Define el color de los puntos
     glEnd();
 
-    globalUi->FPS_Shower->setText("Nuel");
-
+    if(time(0) > timer){ // Verifica si ha pasado un segundo
+        globalUi->FPS_Shower->setText(QString::fromStdString(to_string(fps))); // Modifica el label de ui por la cantidad de fps
+        timer = time(0);  // Resetea el tiempo al tiempo actual
+        fps = 0;
+    } else {
+        fps++; // Cuenta un nuevo fps
+    }
 
     // un update() es equivalente a un fotograma
     // update() Reinicia la función paintGL(), pausar basta con evitar la ejecución de update()

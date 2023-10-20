@@ -14,13 +14,14 @@
 #include <QDebug>
 #include <QMouseEvent>
 #include <QPointF>
+#include <QString>
 
 #include <iostream>
 #include <Eigen/Dense>
 #include <vector>
 #include <random>
 #include <omp.h>
-#include <time.h>
+#include <ctime>
 
 #include <QMainWindow>
 

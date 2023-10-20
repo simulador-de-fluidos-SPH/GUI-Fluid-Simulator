@@ -7,7 +7,6 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    extern int fps; // Cantidad de fps
 
     ui->setupUi(this);
     setWindowTitle("Fluid Simulator");
