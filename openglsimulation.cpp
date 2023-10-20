@@ -1,4 +1,5 @@
 #include "openglsimulation.h"
+#include "ui_mainwindow.h"
 
 OpenGLSimulation::OpenGLSimulation(QWidget *parent)
     :QOpenGLWidget { parent }
@@ -30,18 +31,22 @@ const static float VISC_LAP = 40.f / (M_PI * pow(H, 5.f));
 const static float EPS = H / 2; // Será la distancia de colición de la particula con los bordes
 const static float BOUND_DAMPING = -0.5f; // variable que modificará la dirección de velocidad cuando la particula toca un borde, al ser menor que 1 esta disminuye en magnitud
 
-    struct Particle
+    /*struct Particle
     {
         Particle(float _x, float _y) : x(_x, _y), v(0.f, 0.f), f(0.f, 0.f), rho(0), p(0.f) {} // particle data structure
         Vector2d x, v, f; // stores position, velocity, and force for integration
         float rho, p; // stores density (rho) and pressure values for SPH
-    };
+    };*/
 
 // solver data
 static vector<Particle> particles; // Se daclara un vector de tipo Particle llamado particles
 
+
+// ------------------------------ Variables Globales ------------------------------ //
 Particle* particlePointer = nullptr; // Puntero que almacenará la dirección de memoria de una particula
 bool particleSelected = false; // Variable que sabe si hay una particula seleccionada o no
+int fps = 0;
+extern Ui::MainWindow* globalUi;
 
 // interaction
 const static int MAX_PARTICLES = 2500; // Particulas máximas
@@ -228,6 +233,9 @@ void OpenGLSimulation::paintGL()
     glColor3f(r, g, b); // Define el color de los puntos
     glEnd();
 
+    globalUi->FPS_Shower->setText("Nuel");
+
+
     // un update() es equivalente a un fotograma
     // update() Reinicia la función paintGL(), pausar basta con evitar la ejecución de update()
     update();
@@ -327,6 +335,10 @@ void OpenGLSimulation::particlePointerSetter(QMouseEvent *e){
 
     particlePointer = localPointer;
 }
+
+// -------------------------------------------- Indicadores -------------------------------------------- //
+
+
 
 // -------------------------------------------- COLORS -------------------------------------------- //
 

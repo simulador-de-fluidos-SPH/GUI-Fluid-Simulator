@@ -1,13 +1,18 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QPixmap>
+Ui::MainWindow *globalUi;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    extern int fps; // Cantidad de fps
+
     ui->setupUi(this);
     setWindowTitle("Fluid Simulator");
+
+    globalUi = ui;
 
     QIcon icon(":/new/images/Images/Logo.png");
     setWindowIcon(icon);
@@ -44,6 +49,7 @@ void MainWindow::toggleDockWidget()
     if (ui->dockWidget->isVisible()) {
         ui->dockWidget->close();
         ui->widget->resize(this->width(), ui->widget->height()); // Restaura el tamaño del widget
+
     } else {
         ui->dockWidget->show();
         ui->widget->resize(this->width() - ui->dockWidget->width(), ui->widget->height()); // Modifica el tamaño del widget restandole la anchura del menú
@@ -58,10 +64,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     // Obtiene el nuevo tamaño de la ventana
     QSize newSize = event->QResizeEvent::size();
 
-    // qDebug() << "Tamaño de la ventana:" << newSize.width() << "x" << newSize.height();
-
     // Variables para modificar el tamaño del widget con respecto a mainwindow
-
     int newWidth;
    // Se define como el tamaño de la ventana menos la posición y el tamaño del menú superior
     int newHeight = newSize.height() - ui->toolBar->height() - ui->toolBar->y();

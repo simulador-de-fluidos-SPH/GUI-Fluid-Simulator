@@ -20,6 +20,14 @@
 #include <vector>
 #include <random>
 #include <omp.h>
+#include <time.h>
+
+#include <QMainWindow>
+
+
+QT_BEGIN_NAMESPACE
+namespace Ui { class MainWindow; }
+QT_END_NAMESPACE
 
 class OpenGLSimulation : public QOpenGLWidget, public QOpenGLFunctions
 {
@@ -50,6 +58,9 @@ private:
 
     void qColorToRGB(const QColor &C, float &r, float &g, float &b) const;
     float normaliza_0_1(float val, float min, float max) const;
+
+    //Ui::MainWindow *ui;
+
 };
 
 #endif // OPENGLSIMULATION_H
