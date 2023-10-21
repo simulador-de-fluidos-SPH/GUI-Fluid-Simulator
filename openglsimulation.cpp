@@ -12,7 +12,7 @@ using namespace Eigen;
 
 // "Particle-Based Fluid Simulation for Interactive Applications" by Müller et al.
 // solver parameters
-const static Vector2d G(0.f, -9.8f);   // external (gravitational) forces
+const static Vector2d G(0.f, -10.0f);   // external (gravitational) forces
 const static float REST_DENS = 300.f;  // rest density
 const static float GAS_CONST = 2000.f; // const for equation of state
 const static float H = 16.f;		   // kernel radius
@@ -45,11 +45,21 @@ static vector<Particle> particles; // Se daclara un vector de tipo Particle llam
 
 // ------------------------------ Variables Globales ------------------------------ //
 
-Particle* particlePointer = nullptr; // Puntero que almacenará la dirección de memoria de una particula
-bool particleSelected = false; // Variable que sabe si hay una particula seleccionada o no
+extern Ui::MainWindow* globalUi; // Conección con la ui de mainwindow
+
 int fps = 0; // Contador de fps
 time_t timer = time(0);
-extern Ui::MainWindow* globalUi;
+
+Particle* particlePointer = nullptr; // Puntero que almacenará la dirección de memoria de una particula
+bool particleSelected = false; // Variable que sabe si hay una particula seleccionada o no
+
+Vector2d particlePVelocity; // Velocidad la particula seleccionada
+Vector2d particlePForce; // Fuerza total de la particula seleccionada
+Vector2d particlePFgrav; // Fuerza de gravedad de la particula seleccionada
+Vector2d particlePFvisc; // Fuerza a causa de la viscocidad de la particula seleccionada
+Vector2d particlePFpress; // Fuerza a causa de la presión de la particula seleccionada
+
+Vector2d pmz(30.f, 30.f); // pmz: particle monitor zoom
 
 // interaction
 const static int MAX_PARTICLES = 2500; // Particulas máximas
@@ -138,12 +148,15 @@ void OpenGLSimulation::ComputeDensityPressure(void)
             Vector2d rij = pj.x - pi.x; // Se obtiene el vector entre las posiciones de cada particula, i y j son subindices respecto a su iterador
             float r2 = rij.squaredNorm(); // se calcula la magnitud cuadrada del vector (no se le saca raíz)
 
+
             if (r2 < HSQ) /* Se pregunnta si la distancia de las particulas es menor que el radio del kernel, es decir
 si una particula está sobre otra  */
             {
+
                 // this computation is symmetric
                 pi.rho += MASS * POLY6 * pow(HSQ - r2, 3.f); /* Se cálcula la densidad del punto en el que se
-encuentra la particula*/
+encuentra la particula, POLY6 normaliza la densidad*/
+                // printf("\n\nMASS: %f\nPOLY6: %f \nPOW: %f \nrho: %f", MASS, POLY6, pow(HSQ - r2, 3.f), pi.rho);
             }
         }
         pi.p = GAS_CONST * (pi.rho - REST_DENS); /* Se cálcula la presión de la particula despues de sumar
@@ -183,6 +196,15 @@ se resta **la diferencia de velocidad entre pj y pi para determinar la magnitud 
         }
         Vector2d fgrav = G * MASS / pi.rho; // La fuerza de gravedad por la masa partido entre la desnsidad de particulas el punto de la particula pi
         pi.f = fpress + fvisc + fgrav; // Es la sumatoria de la fuerza de presión, viscocidad y gravedad
+
+        // Se normalizan las fuerzas que se mostrarán en pantalla
+        if(&pi == particlePointer){ // Si la particula iterada es la particula seleccionada guardar las fuerzas
+            particlePVelocity = norMagnitude(pi.v, pi.rho);
+            particlePForce = norMagnitude(pi.f, pi.rho);
+            particlePFgrav = norMagnitude(fgrav, pi.rho);
+            particlePFpress = norMagnitude(fpress, pi.rho);
+            particlePFvisc = norMagnitude(fvisc, pi.rho);
+        }
     }
 }
 
@@ -234,7 +256,6 @@ void OpenGLSimulation::paintGL()
         } else {
             glVertex2f(p.x(0), p.x(1)); // Se muestra el vector normalizado en coordenadas norx nory
         }
-        // qDebug() << "p.x(0): " << norX << "p.x(1): " << norY << "\n" << width() << " " << height() << "\n";
     }
     glEnd();
 
@@ -243,6 +264,7 @@ void OpenGLSimulation::paintGL()
     glColor3f(r, g, b); // Define el color de los puntos
     glEnd();
 
+    modUiData(); // Modifica los datos de fuerza y velocidad de ui
     if(time(0) > timer){ // Verifica si ha pasado un segundo
         globalUi->FPS_Shower->setText(QString::fromStdString(to_string(fps))); // Modifica el label de ui por la cantidad de fps
         timer = time(0);  // Resetea el tiempo al tiempo actual
@@ -265,12 +287,12 @@ void OpenGLSimulation::resizeGL(int w, int h)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity(); // Carga la matriz identidad
 
-    /* ################# Bounding interaction implementation #################
+    // ################# Bounding interaction implementation #################
     WINDOW_WIDTH = w;
     WINDOW_HEIGHT = h;
     VIEW_WIDTH =  static_cast<double>(w);
     VIEW_HEIGHT =  static_cast<double>(h);
-    */
+
 
     glOrtho(0.0, VIEW_WIDTH, 0.0, VIEW_HEIGHT, -1.0, 1.0); // Configura la cámara para que apunte y tenga el tamaño del openGLWidget
 
@@ -351,9 +373,29 @@ void OpenGLSimulation::particlePointerSetter(QMouseEvent *e){
     particlePointer = localPointer;
 }
 
-// -------------------------------------------- Measures -------------------------------------------- //
+// -------------------------------------------- MAGNITUDES -------------------------------------------- //
 
+Vector2d OpenGLSimulation::norMagnitude(Vector2d f, float rho){ // Recibe una fuerza y la densidad y la convierte
+    return f * rho;
+}
 
+void OpenGLSimulation::modUiData(){ // Esta función modifica las casillas de ui con los nuevos valores de los datos
+    globalUi->velocity_0->setText(QString::number(particlePVelocity(0), 'f', 2));
+    globalUi->velocity_1->setText(QString::number(particlePVelocity(1), 'f', 2));
+
+    globalUi->total_force_0->setText(QString::number(particlePForce(0), 'f', 2));
+    globalUi->total_force_1->setText(QString::number(particlePForce(1), 'f', 2));
+
+    globalUi->gravity_0->setText(QString::number(particlePFgrav(0), 'f', 2));
+    globalUi->gravity_1->setText(QString::number(particlePFgrav(1), 'f', 2));
+
+    globalUi->press_0->setText(QString::number(particlePFpress(0), 'f', 2));
+    globalUi->press_1->setText(QString::number(particlePFpress(1), 'f', 2));
+
+    globalUi->viscocity_0->setText(QString::number(particlePFvisc(0), 'f', 2));
+    globalUi->viscocity_1->setText(QString::number(particlePFvisc(1), 'f', 2));
+
+}
 
 // -------------------------------------------- COLORS -------------------------------------------- //
 
