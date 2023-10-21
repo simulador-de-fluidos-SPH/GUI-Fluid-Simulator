@@ -18,11 +18,11 @@
 
 using namespace Eigen;
 
-struct Particle // Se define la estructura Particle
+struct Particle
 {
-    Particle(float _x, float _y) : x(_x, _y), v(0.f, 0.f), f(0.f, 0.f), rho(0), p(0.f) {}
-    Vector2d x, v, f;
-    float rho, p;
+    Particle(float _x, float _y) : x(_x, _y), v(0.f, 0.f), f(0.f, 0.f), rho(0), p(0.f) {} // particle data structure
+    Vector2d x, v, f; // stores position, velocity, and force for integration
+    float rho, p; // stores density (rho) and pressure values for SPH
 };
 
 class particleMonitor: public QOpenGLWidget, public QOpenGLFunctions

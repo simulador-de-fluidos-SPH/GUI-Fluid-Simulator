@@ -23,9 +23,10 @@ const static float DT = 0.0007f;	   // integration timestep
 
 // smoothing kernels defined in Müller and their gradients
 // adapted to 2D per "SPH Based Shallow Water Simulation" by Solenthaler et al.
-const static float POLY6 = 4.f / (M_PI * pow(H, 8.f));
-const static float SPIKY_GRAD = -10.f / (M_PI * pow(H, 5.f));
-const static float VISC_LAP = 40.f / (M_PI * pow(H, 5.f));
+// H es el radio del kernel, la unidad resultante es la unidad del radio del kernel
+const static float POLY6 = 4.f / (M_PI * pow(H, 8.f)); // 4/(π * H⁸): Estima la densidad del fluido en función de la distancia con otras particulas
+const static float SPIKY_GRAD = -10.f / (M_PI * pow(H, 5.f)); // -10/(π * H⁵): Ayuda a calcular las fuerzas que actuan sobre una particula
+const static float VISC_LAP = 40.f / (M_PI * pow(H, 5.f)); // 40/(π * H⁵): Se utiliza para calculos relacionados con la densidad del fluido
 
 // simulation parameters
 const static float EPS = H / 2; // Será la distancia de colición de la particula con los bordes
@@ -129,21 +130,24 @@ void OpenGLSimulation::Integrate(void)
 void OpenGLSimulation::ComputeDensityPressure(void)
 {
         #pragma omp parallel for
-    for (auto &pi : particles) // Recorre las particulas del vector particles
+    for (auto &pi : particles) // primer iterador pi
     {
-        pi.rho = 0.f;
-        for (auto &pj : particles)
+        pi.rho = 0.f; // presión de la particula = 0
+        for (auto &pj : particles) // segundo iterador pj
         {
-            Vector2d rij = pj.x - pi.x;
-            float r2 = rij.squaredNorm();
+            Vector2d rij = pj.x - pi.x; // Se obtiene el vector entre las posiciones de cada particula, i y j son subindices respecto a su iterador
+            float r2 = rij.squaredNorm(); // se calcula la magnitud cuadrada del vector (no se le saca raíz)
 
-            if (r2 < HSQ)
+            if (r2 < HSQ) /* Se pregunnta si la distancia de las particulas es menor que el radio del kernel, es decir
+si una particula está sobre otra  */
             {
                 // this computation is symmetric
-                pi.rho += MASS * POLY6 * pow(HSQ - r2, 3.f);
+                pi.rho += MASS * POLY6 * pow(HSQ - r2, 3.f); /* Se cálcula la densidad del punto en el que se
+encuentra la particula*/
             }
         }
-        pi.p = GAS_CONST * (pi.rho - REST_DENS);
+        pi.p = GAS_CONST * (pi.rho - REST_DENS); /* Se cálcula la presión de la particula despues de sumar
+        el efecto de todas las particulas pj sobre pi, esta es una magnitud escalar*/
     }
 }
 
@@ -151,30 +155,34 @@ void OpenGLSimulation::ComputeDensityPressure(void)
 void OpenGLSimulation::ComputeForces(void)
 {
         #pragma omp parallel for
-    for (auto &pi : particles) // Recorre las particulas del vector particles
+    for (auto &pi : particles) // primer iterador pi
     {
         Vector2d fpress(0.f, 0.f);
         Vector2d fvisc(0.f, 0.f);
-        for (auto &pj : particles)
+        for (auto &pj : particles) // segundo iterador pj
         {
-            if (&pi == &pj)
+            if (&pi == &pj) // Si ambos punteros apuntan a la misma particula iterar sobre el siguiente &pj
             {
                 continue;
             }
 
-            Vector2d rij = pj.x - pi.x;
-            float r = rij.norm();
+            Vector2d rij = pj.x - pi.x; // Vector que relaciona la posición entre pi y pj
+            float r = rij.norm(); // Norma de rij
 
-            if (r < H)
+            // -------------------------- Cálculo de fuerzas -------------------------- //
+            if (r < H) // Se pregunta si la norma r es menor al radio del kernel para saber si se tienen que calcular o no
             {
                 // compute pressure force contribution
-                fpress += -rij.normalized() * MASS * (pi.p + pj.p) / (2.f * pj.rho) * SPIKY_GRAD * pow(H - r, 3.f);
+                fpress += -rij.normalized() * MASS * (pi.p + pj.p) / (2.f * pj.rho) * SPIKY_GRAD * pow(H - r, 3.f); /*
+-rij.normalized() es el vector unitario en dirección opuesta a rij ** fpress es la fuerza a la que se ve sometida una particula
+al estar en contacto con otra, siendo esta una fuerza de repulsión ** */
                 // compute viscosity force contribution
-                fvisc += VISC * MASS * (pj.v - pi.v) / pj.rho * VISC_LAP * (H - r);
+                fvisc += VISC * MASS * (pj.v - pi.v) / pj.rho * VISC_LAP * (H - r); /* Fuerza ejercida sobre pi por pj junto con otras variables fijas.
+se resta **la diferencia de velocidad entre pj y pi para determinar la magnitud y dirección de fvisc** */
             }
         }
-        Vector2d fgrav = G * MASS / pi.rho; // Fuerza de gravedad * masa partido entre densidad
-        pi.f = fpress + fvisc + fgrav;
+        Vector2d fgrav = G * MASS / pi.rho; // La fuerza de gravedad por la masa partido entre la desnsidad de particulas el punto de la particula pi
+        pi.f = fpress + fvisc + fgrav; // Es la sumatoria de la fuerza de presión, viscocidad y gravedad
     }
 }
 
@@ -343,7 +351,7 @@ void OpenGLSimulation::particlePointerSetter(QMouseEvent *e){
     particlePointer = localPointer;
 }
 
-// -------------------------------------------- Indicadores -------------------------------------------- //
+// -------------------------------------------- Measures -------------------------------------------- //
 
 
 
