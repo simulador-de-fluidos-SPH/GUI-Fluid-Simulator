@@ -1,0 +1,28 @@
+name: Build and Test Qt Project
+
+on:
+  push:
+    branches:
+      - main  # Change this to your main branch name
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # You can choose another OS if needed
+
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v2
+
+    - name: Set up Qt
+      uses: ilg/bazel-qt-setup@v1
+      with:
+        qt-version: '5.15.11'  # Replace with your Qt version
+
+    - name: Configure and build
+      run: |
+        qmake -r
+        make
+      env:
+        QMAKE: qmake  # You can specify the path to qmake if needed
+
+    # Add additional steps for testing, deploying, etc.
