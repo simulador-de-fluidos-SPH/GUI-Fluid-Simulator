@@ -20,7 +20,7 @@
 #include <Eigen/Dense>
 #include <vector>
 #include <random>
-#include <omp.h>
+//#include <omp.h>
 #include <ctime>
 
 #include <QMainWindow>
