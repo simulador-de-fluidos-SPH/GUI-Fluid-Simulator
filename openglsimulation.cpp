@@ -63,7 +63,7 @@ Vector2d pmz(30.f, 30.f); // pmz: particle monitor zoom
 
 // interaction
 const static int MAX_PARTICLES = 2500; // Particulas máximas
-const static int DAM_PARTICLES = 100; // Particulas generadas
+const static int DAM_PARTICLES = 10; // Particulas generadas
 const static int BLOCK_PARTICLES = 250; // Particulas generables por click
 
 // rendering projection parameters
@@ -71,6 +71,11 @@ int WINDOW_WIDTH = 750;
 int WINDOW_HEIGHT = 400;
 double VIEW_WIDTH = 750;
 double VIEW_HEIGHT = 400;
+
+//Variables para rastrear movimiento del mouse
+bool mPressed = false; //para saber si el mouse esta presionado o no
+QPoint mousePressPos; //Posicion de donde se presionó el mouse
+QPoint mouseReleasePos; //Posicion de donde se soltó el mouse
 
 
 // Función para inicializar las particulas
@@ -300,17 +305,17 @@ void OpenGLSimulation::resizeGL(int w, int h)
 
 // -------------------------------------------- TOOLS -------------------------------------------- //
 
-// Función que se ejecutará cada que el mouse es presionado
-void OpenGLSimulation::mousePressEvent(QMouseEvent *e)
+// Función que se ejecutará cada que el mouse es presionado - Esto hay que adecuarlo a los botones
+/*void OpenGLSimulation::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) // Verifica que se hizo clic con el botón izquierdo del ratón
     {
         // --------- FUNCIONES DE AL CLICKER --------- //
-        particlePointerSetter(e);
-
+        //particlePointerSetter(e);
+        launchParticle(e);
         //deleteParticle(e);
     }
-}
+}*/
 
 // Función para seleccionar una particula y devuelve la dirección de memoria de la particula seleccionada como dirección void no Particle
 void* OpenGLSimulation::selectParticle(QMouseEvent *e){
@@ -372,6 +377,66 @@ void OpenGLSimulation::particlePointerSetter(QMouseEvent *e){
 
     particlePointer = localPointer;
 }
+
+// Funciones para lanzar una partícula desde cualquier dirección
+// Funciones para lanzar una partícula desde cualquier dirección
+void OpenGLSimulation::mousePressEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::LeftButton)
+    {
+        mPressed = true;
+        mousePressPos = e->pos(); // Almacena la posición de presionado
+    }
+}
+
+void OpenGLSimulation::mouseMoveEvent(QMouseEvent *e)
+{
+    if (mPressed)
+    {
+        // Calcula la distancia entre la posición actual y la posición de presionado
+        int deltaX = e->x() - mousePressPos.x();
+        int deltaY = e->y() - mousePressPos.y();
+
+        // Calcula la velocidad en función de la distancia y un factor de escala
+        float scale = 0.1f; // Ajusta este valor según la velocidad deseada
+        float velx = static_cast<float>(deltaX) * scale;
+        float vely = static_cast<float>(deltaY) * scale;
+
+        // Crea una nueva partícula con la posición inicial en el punto de clic
+        particles.push_back(Particle(e->x(), height() - e->y()));
+        // Asigna la velocidad a la última partícula en el vector
+        if (!particles.empty()) {
+            particles.back().v = Vector2d(velx, vely);
+        }
+    }
+}
+
+void OpenGLSimulation::mouseReleaseEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::LeftButton)
+    {
+        mPressed = false;
+    }
+}
+
+
+
+/*void OpenGLSimulation::launchParticle(QMouseEvent *e)
+{
+#if defined(Q_OS_LINUX)
+    QPointF positionElement = e->localPos();
+#elif defined(Q_OS_WINDOWS)
+    QPointF positionElement = e->position();
+#endif
+
+    float positionX = positionElement.x() * WINDOW_WIDTH / width();
+    float positionY = (height() - positionElement.y()) * VIEW_HEIGHT / height();
+
+
+
+
+
+}*/
 
 // -------------------------------------------- MAGNITUDES -------------------------------------------- //
 
