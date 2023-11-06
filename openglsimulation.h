@@ -56,8 +56,11 @@ private:
     // Funciones de heramientas
     void* selectParticle(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
     void particlePointerSetter(QMouseEvent *e);
     void deleteParticle(QMouseEvent *e);
+    void launchParticle(QMouseEvent *e);
     void modUiData();
 
     void qColorToRGB(const QColor &C, float &r, float &g, float &b) const;
