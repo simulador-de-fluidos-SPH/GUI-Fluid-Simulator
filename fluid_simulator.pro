@@ -27,12 +27,14 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     openglsimulation.cpp \
-    particlemonitor.cpp
+    particlemonitor.cpp \
+    particleproperties.cpp
 
 HEADERS += \
     mainwindow.h \
     openglsimulation.h \
-    particlemonitor.h
+    particlemonitor.h \
+    particleproperties.h
 
 FORMS += \
     mainwindow.ui

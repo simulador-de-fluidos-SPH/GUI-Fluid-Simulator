@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "particleproperties.h"
 #include <QPixmap>
 Ui::MainWindow *globalUi;
 
@@ -73,6 +74,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     } else { // De lo contrario se define como el nuevo tamaño de la pantalla
         newWidth = newSize.width();
     }
+
 
     // Ajusta el tamaño del QOpenGLWidget
     ui->widget->resize(newWidth, newHeight);
