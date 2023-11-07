@@ -23,6 +23,12 @@ private:
 protected:
     // Esta función se llama cuando la ventana cambia de tamaño
     void resizeEvent(QResizeEvent *event) override;
+private slots:
+    void on_ButtonThrow_clicked();
+    void on_ButtonExplosion_clicked();
+    void on_ButtonDelete_clicked();
+    void on_ButtonSplash_clicked();
+    void on_ButtonSelect_clicked();
 };
 
 

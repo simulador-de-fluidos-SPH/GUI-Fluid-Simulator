@@ -2,7 +2,10 @@
 #include "ui_mainwindow.h"
 #include "particleproperties.h"
 #include <QPixmap>
+
+// Variables Globales
 Ui::MainWindow *globalUi;
+int herramientaSeleccionada = 0; // Variable que alamcenará la herramienta seleccionada por el usuario
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -81,4 +84,38 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 
     ui->widget->update();
 }
+
+
+// ------------------ Funciones de botones ------------------ //
+
+void MainWindow::on_ButtonSelect_clicked()
+{
+    herramientaSeleccionada = 0;
+}
+
+
+void MainWindow::on_ButtonThrow_clicked()
+{
+    herramientaSeleccionada = 1;
+}
+
+
+void MainWindow::on_ButtonExplosion_clicked()
+{
+    herramientaSeleccionada = 2;
+}
+
+
+void MainWindow::on_ButtonDelete_clicked()
+{
+    herramientaSeleccionada = 3;
+}
+
+
+void MainWindow::on_ButtonSplash_clicked()
+{
+    herramientaSeleccionada = 4;
+}
+
+
 
