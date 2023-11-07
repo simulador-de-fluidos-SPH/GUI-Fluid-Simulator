@@ -46,6 +46,7 @@ static vector<Particle> particles; // Se daclara un vector de tipo Particle llam
 // ------------------------------ Variables Globales ------------------------------ //
 
 extern Ui::MainWindow* globalUi; // Conección con la ui de mainwindow
+extern int herramientaSeleccionada; // Herramienta seleccionada por el usuario
 
 int fps = 0; // Contador de fps
 time_t timer = time(0);
@@ -61,6 +62,11 @@ Vector2d particlePFpress; // Fuerza a causa de la presión de la particula selec
 
 Vector2d pmz(30.f, 30.f); // pmz: particle monitor zoom
 
+//Variables para rastrear movimiento del mouse
+bool mPressed = false; //para saber si el mouse esta presionado o no
+QPoint mousePressPos; //Posicion de donde se presionó el mouse
+QPoint mouseReleasePos; //Posicion de donde se soltó el mouse
+
 // interaction
 const static int MAX_PARTICLES = 2500; // Particulas máximas
 const static int DAM_PARTICLES = 10; // Particulas generadas
@@ -71,12 +77,6 @@ int WINDOW_WIDTH = 750;
 int WINDOW_HEIGHT = 400;
 double VIEW_WIDTH = 750;
 double VIEW_HEIGHT = 400;
-
-//Variables para rastrear movimiento del mouse
-bool mPressed = false; //para saber si el mouse esta presionado o no
-QPoint mousePressPos; //Posicion de donde se presionó el mouse
-QPoint mouseReleasePos; //Posicion de donde se soltó el mouse
-
 
 // Función para inicializar las particulas
 void OpenGLSimulation::InitSPH()
@@ -306,16 +306,31 @@ void OpenGLSimulation::resizeGL(int w, int h)
 // -------------------------------------------- TOOLS -------------------------------------------- //
 
 // Función que se ejecutará cada que el mouse es presionado - Esto hay que adecuarlo a los botones
-/*void OpenGLSimulation::mousePressEvent(QMouseEvent *e)
+void OpenGLSimulation::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) // Verifica que se hizo clic con el botón izquierdo del ratón
     {
-        // --------- FUNCIONES DE AL CLICKER --------- //
-        //particlePointerSetter(e);
-        launchParticle(e);
-        //deleteParticle(e);
+        int hs = herramientaSeleccionada;
+
+        // Operadores ternarios para saber que opción tiene seleccionada el usuario y ejecutar una función
+        hs == 3 ? deleteParticle(e) : particlePointerSetter(e);
+
+        /*
+        FUNCIONES PARA IMPLEMENTAR (índice)
+        0: Función para seleccionar particula (v) [Por defecto]
+        1: Función para crear particula (x)
+        2: Función de splash (x)
+        3: Función de eliminar particula (v)
+        4: Función de explosión (x)
+        */
+
+
+    } else if (e->button() == Qt::RightButton)
+    { // Funciones para lanzar una partícula desde cualquier dirección
+        mPressed = true;
+        mousePressPos = e->pos(); // Almacena la posición de presionado
     }
-}*/
+}
 
 // Función para seleccionar una particula y devuelve la dirección de memoria de la particula seleccionada como dirección void no Particle
 void* OpenGLSimulation::selectParticle(QMouseEvent *e){
@@ -378,17 +393,6 @@ void OpenGLSimulation::particlePointerSetter(QMouseEvent *e){
     particlePointer = localPointer;
 }
 
-// Funciones para lanzar una partícula desde cualquier dirección
-// Funciones para lanzar una partícula desde cualquier dirección
-void OpenGLSimulation::mousePressEvent(QMouseEvent *e)
-{
-    if (e->button() == Qt::LeftButton)
-    {
-        mPressed = true;
-        mousePressPos = e->pos(); // Almacena la posición de presionado
-    }
-}
-
 void OpenGLSimulation::mouseMoveEvent(QMouseEvent *e)
 {
     if (mPressed)
@@ -413,7 +417,7 @@ void OpenGLSimulation::mouseMoveEvent(QMouseEvent *e)
 
 void OpenGLSimulation::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::LeftButton)
+    if (e->button() == Qt::RightButton)
     {
         mPressed = false;
     }
@@ -431,10 +435,6 @@ void OpenGLSimulation::mouseReleaseEvent(QMouseEvent *e)
 
     float positionX = positionElement.x() * WINDOW_WIDTH / width();
     float positionY = (height() - positionElement.y()) * VIEW_HEIGHT / height();
-
-
-
-
 
 }*/
 
