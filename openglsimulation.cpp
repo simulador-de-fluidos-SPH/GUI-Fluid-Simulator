@@ -1,25 +1,28 @@
 #include "openglsimulation.h"
 #include "ui_mainwindow.h"
+#include "particleproperties.h"
 
 OpenGLSimulation::OpenGLSimulation(QWidget *parent)
     :QOpenGLWidget { parent }
 {
     setMouseTracking(true); // Se habilita la seguimiento del ratón
 }
-
+FluidProperties particleproperties;
 using namespace std;
 using namespace Eigen;
 
 // "Particle-Based Fluid Simulation for Interactive Applications" by Müller et al.
 // solver parameters
-const static Vector2d G(0.f, -10.0f);   // external (gravitational) forces
-const static float REST_DENS = 300.f;  // rest density
-const static float GAS_CONST = 2000.f; // const for equation of state
-const static float H = 16.f;		   // kernel radius
-const static float HSQ = H * H;		   // radius^2 for optimization
-const static float MASS = 2.5f;		   // assume all particles have the same mass
-const static float VISC = 200.f;	   // viscosity constant
-const static float DT = 0.0007f;	   // integration timestep
+static Vector2d G(0.f, -9.8f);   // external (gravitational) forces
+
+// se ponen los valores que están incluidos en particleproperties.cpp
+float REST_DENS = particleproperties.REST_DENS;  // rest density
+float GAS_CONST = particleproperties.GAS_CONST; // const for equation of state
+float H = particleproperties.H;		   // kernel radius
+float HSQ = particleproperties.HSQ;		   // radius^2 for optimization
+float MASS = particleproperties.MASS;		   // assume all particles have the same mass
+float VISC = particleproperties.VISC;	   // viscosity constant
+float DT = particleproperties.DT;	   // integration timestep
 
 // smoothing kernels defined in Müller and their gradients
 // adapted to 2D per "SPH Based Shallow Water Simulation" by Solenthaler et al.
