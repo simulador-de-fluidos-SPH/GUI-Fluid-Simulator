@@ -30,9 +30,6 @@ void InitSPH()
             {
                 float jitter = dist(gen); // Generar un valor aleatorio en el rango [0.0, 1.0] para introducir una variación de posición
                 newParticle(x + jitter, y, globalUi->Fluid_Menu->currentIndex());
-                /*particles.push_back(Particle(x + jitter, y,
-                                             props[0].red, props[0].green, props[0].blue,  // Color RGB
-                                             props[0].REST_DENS, props[0].GAS_CONST, props[0].H, props[0].MASS, props[0].VISC, props[0].DT)); // Se crea un nuevo Particle y se añade al vector particles (x + jitter introduce la variación en x)*/
             }
             else
             {
@@ -94,12 +91,12 @@ si una particula está sobre otra  */
             {
 
                 // this computation is symmetric
-                pi.rho += MASS * POLY6 * pow(HSQ - r2, 3.f); /* Se cálcula la densidad del punto en el que se
+                pi.rho += pi.MASS * POLY6 * pow(HSQ - r2, 3.f); /* Se cálcula la densidad del punto en el que se
 encuentra la particula, POLY6 normaliza la densidad*/
                 // printf("\n\nMASS: %f\nPOLY6: %f \nPOW: %f \nrho: %f", MASS, POLY6, pow(HSQ - r2, 3.f), pi.rho);
         }
     }
-    pi.p = GAS_CONST * (pi.rho - REST_DENS); /* Se cálcula la presión de la particula despues de sumar
+    pi.p = pi.GAS_CONST * (pi.rho - pi.REST_DENS); /* Se cálcula la presión de la particula despues de sumar
         el efecto de todas las particulas pj sobre pi, esta es una magnitud escalar*/
 }
 }
@@ -126,15 +123,15 @@ void ComputeForces(void)
             if (r < H) // Se pregunta si la norma r es menor al radio del kernel para saber si se tienen que calcular o no
             {
                 // compute pressure force contribution
-                fpress += -rij.normalized() * MASS * (pi.p + pj.p) / (2.f * pj.rho) * SPIKY_GRAD * pow(H - r, 3.f); /*
+                fpress += -rij.normalized() * pi.MASS * (pi.p + pj.p) / (2.f * pj.rho) * SPIKY_GRAD * pow(H - r, 3.f); /*
 -rij.normalized() es el vector unitario en dirección opuesta a rij ** fpress es la fuerza a la que se ve sometida una particula
 al estar en contacto con otra, siendo esta una fuerza de repulsión ** */
                 // compute viscosity force contribution
-                fvisc += VISC * MASS * (pj.v - pi.v) / pj.rho * VISC_LAP * (H - r); /* Fuerza ejercida sobre pi por pj junto con otras variables fijas.
+                fvisc += pi.VISC * pi.MASS * (pj.v - pi.v) / pj.rho * VISC_LAP * (H - r); /* Fuerza ejercida sobre pi por pj junto con otras variables fijas.
 se resta **la diferencia de velocidad entre pj y pi para determinar la magnitud y dirección de fvisc** */
             }
         }
-        Vector2d fgrav = G * MASS / pi.rho; // La fuerza de gravedad por la masa partido entre la desnsidad de particulas el punto de la particula pi
+        Vector2d fgrav = G * pi.MASS / pi.rho; // La fuerza de gravedad por la masa partido entre la desnsidad de particulas el punto de la particula pi
         pi.f = fpress + fvisc + fgrav; // Es la sumatoria de la fuerza de presión, viscocidad y gravedad
 
         // Se normalizan las fuerzas que se mostrarán en pantalla
