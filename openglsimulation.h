@@ -17,7 +17,6 @@
 
 #include <Eigen/Dense>
 #include <vector>
-//#include <omp.h>
 #include <ctime>
 
 using namespace Eigen;

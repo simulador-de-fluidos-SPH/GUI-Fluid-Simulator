@@ -10,7 +10,6 @@ OpenGLSimulation::OpenGLSimulation(QWidget *parent)
 {
     setMouseTracking(true); // Se habilita la seguimiento del ratón
 }
-FluidProperties particleproperties;
 using namespace std;
 using namespace Eigen;
 
@@ -148,12 +147,12 @@ void OpenGLSimulation::mouseMoveEvent(QMouseEvent *e)
         int deltaY = e->y() - mousePressPos.y();
 
         // Calcula la velocidad en función de la distancia y un factor de escala
-        float scale = 100.1f; // Ajusta este valor según la velocidad deseada
+        float scale = 0.1f; // Ajusta este valor según la velocidad deseada
         float velx = static_cast<float>(deltaX) * scale;
         float vely = static_cast<float>(deltaY) * scale;
 
         // Crea una nueva partícula con la posición inicial en el punto de clic
-        particles.push_back(Particle(e->x(), height() - e->y(), 0.30980f, 0.25882f, 0.70980f));
+        newParticle(e->x(), height() - e->y(), globalUi->Fluid_Menu->currentIndex());
         // Asigna la velocidad a la última partícula en el vector
         if (!particles.empty()) {
             particles.back().v = Vector2d(velx, vely);

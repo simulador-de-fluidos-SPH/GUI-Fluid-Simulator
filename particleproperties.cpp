@@ -1,115 +1,30 @@
 #include "particleproperties.h"
+#include "globalVariables.h"
 
-FluidProperties::FluidProperties() {
-    // Inicializa las propiedades del fluido con valores predeterminados
-    REST_DENS = 300.f;
-    GAS_CONST = 2000.f;
-    H = 16.f;
-    HSQ = H * H;
-    MASS = 2.5f;
-    VISC = 200.f;
-    DT = 0.0007f;
+/* properties:
 
-}
+    RED
+    GREEN
+    BLUE
+    REST_DENS
+    GAS_CONST
+    H
+    HSQ
+    MASS
+    VISC
+    DT
+*/
 
-void FluidProperties::setWaterProperties() {
-    REST_DENS = 300.f;
-    GAS_CONST = 2000.f;
-    H = 16.f;
-    HSQ = H * H;
-    MASS = 2.5f;
-    VISC = 200.f;
-    DT = 0.0007f;
-}
-
-void FluidProperties::setOilProperties() {
-    //propiedades para simular aceite
-    REST_DENS = 250.f;
-    GAS_CONST = 1500.f;
-    H = 15.f;
-    HSQ = H * H;
-    MASS = 3.f;
-    VISC = 400.f;
-    DT = 0.001f;
-}
-
-void FluidProperties::setResinProperties() {
-    // propiedades para simular resina
-    REST_DENS = 400.f;
-    GAS_CONST = 1500.f;
-    H = 18.f;
-    HSQ = H * H;
-    MASS = 3.f;
-    VISC = 300.f;
-    DT = 0.00048f;
-}
-void FluidProperties::setAlcoholProperties() {
-    //propiedades para simular alcohol
-    REST_DENS = 200.f;
-    GAS_CONST = 1200.f;
-    H = 15.f;
-    HSQ = H * H;
-    MASS = 1.5f;
-    VISC = 200.f;
-    DT = 0.00075f;
-}
-void FluidProperties::setMagmaProperties() {
-    // Cambia las propiedades para simular magma
-    REST_DENS = 800.f;
-    GAS_CONST = 1500.f;
-    H = 20.f;
-    HSQ = H * H;
-    MASS = 5.f;
-    VISC = 1000.f;
-    DT = 0.0001f;
-}
-void FluidProperties::setMilkProperties() {
-    //propiedades para simular leche
-    REST_DENS = 320.f;
-    GAS_CONST = 1800.f;
-    H = 19.f;
-    HSQ = H * H;
-    MASS = 2.5f;
-    VISC = 150.f;
-    DT = 0.00063f;
-}
-void FluidProperties::setGlueProperties() {
-    //propiedades para simular pegamento
-    REST_DENS = 310.f;
-    GAS_CONST = 1600.f;
-    H = 17.f;
-    HSQ = H * H;
-    MASS = 3.f;
-    VISC = 250.f;
-    DT = 0.00033f;
-}
-void FluidProperties::setQuickSandProperties() {
-    //propiedades para simular arenas movedizas
-    REST_DENS = 400.f;
-    GAS_CONST = 1400.f;
-    H = 22.f;
-    HSQ = H * H;
-    MASS = 4.f;
-    VISC = 350.f;
-    DT = 0.0002f;
-}
-void FluidProperties::setBloodProperties() {
-    //propiedades para simular sangre
-    REST_DENS = 330.f;
-    GAS_CONST = 1700.f;
-    H = 19.5f;
-    HSQ = H * H;
-    MASS = 2.5f;
-    VISC = 180.f;
-    DT = 0.0006f;
-}
-void FluidProperties::setHoneyProperties() {
-    //propiedades para simular miel
-    REST_DENS = 390.f;
-    GAS_CONST = 1900.f;
-    H = 21.f;
-    HSQ = H * H;
-    MASS = 3.f;
-    VISC = 220.f;
-    DT = 0.00036f;
-}
+Data props[] = {
+    {0.30980f, 0.25882f, 0.70980f, 300.f, 2000.f, 16.f, 16.f * 16.f, 2.5f, 200.f, 0.0007f},   // Default
+    {0.83137f, 0.94510f, 0.97647f, 300.f, 2000.f, 16.f, 16.f * 16.f, 2.5f, 200.f, 0.0007f},   // Water
+    {0.85882f, 0.81176f, 0.36078f, 250.f, 1500.f, 15.f, 15.f * 15.f, 3.f, 400.f, 0.001f},     // Oil
+    {0.6f, 0.6f, 0.6f, 400.f, 1500.f, 18.f, 18.f * 18.f, 3.f, 300.f, 0.00048f},   // Resin
+    {0.58824f, 0.10588f, 0.09804f, 200.f, 1200.f, 15.f, 15.f * 15.f, 1.5f, 200.f, 0.00075f},  // Alcohol
+    {0.81176f, 0.06275f, 0.12549f, 800.f, 1500.f, 20.f, 20.f * 20.f, 5.f, 1000.f, 0.0001f},   // Magma
+    {0.99216f, 1.00000f, 0.96078f, 320.f, 1800.f, 19.f, 19.f * 19.f, 2.5f, 150.f, 0.00063f},  // Milk
+    {0.99608f, 0.98824f, 0.98039f, 310.f, 1600.f, 17.f, 17.f * 17.f, 3.f, 250.f, 0.00033f},   // Glue
+    {0.76078f, 0.69804f, 0.50196f, 400.f, 1400.f, 22.f, 22.f * 22.f, 4.f, 350.f, 0.0002f},    // QuickSand
+    {0.54118f, 0.01176f, 0.01176f, 330.f, 1700.f, 19.5f, 19.5f * 19.5f, 2.5f, 180.f, 0.0006f}, // Blood
+    {0.92157f, 0.66275f, 0.21569f, 390.f, 1900.f, 21.f, 21.f * 21.f, 3.f, 220.f, 0.00036f}    // Honey
+};

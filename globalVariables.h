@@ -17,15 +17,44 @@ QT_END_NAMESPACE
 
 struct Particle
 {
-    Particle(float _x, float _y, float _r, float _g, float _b)
-        : x(_x, _y), v(0.f, 0.f), f(0.f, 0.f), rho(0), p(0.f), red(_r), green(_g), blue(_b) {} // particle data structure
+    Particle(float _x, float _y, float _r, float _g, float _b,
+             float _restDens, float _gasConst, float _h, float _mass, float _visc, float _dt)
+        : x(_x, _y), v(0.f, 0.f), f(0.f, 0.f), rho(0), p(0.f), red(_r), green(_g), blue(_b),
+        REST_DENS(_restDens), GAS_CONST(_gasConst), H(_h), HSQ(_h * _h), MASS(_mass), VISC(_visc), DT(_dt) {} // particle data structure
+
     Vector2d x, v, f; // stores position, velocity, and force for integration
     float rho, p;     // stores density (rho) and pressure values for SPH
     float red, green, blue; // particle colors
+
+    float REST_DENS;
+    float GAS_CONST;
+    float H;
+    float HSQ;
+    float MASS;
+    float VISC;
+    float DT;
 };
+
+// Definición de la estructura Data
+struct Data {
+    float red;
+    float green;
+    float blue;
+    float REST_DENS;
+    float GAS_CONST;
+    float H;
+    float HSQ;
+    float MASS;
+    float VISC;
+    float DT;
+};
+
+extern Data props[]; // Estructura que almacena los diferentes tipos de datos (definición en "particleproperties.cpp")
 
 extern Ui::MainWindow* globalUi; // Conección con la ui de mainwindow
 extern int herramientaSeleccionada; // Variable que alamcenará la herramienta seleccionada por el usuario
+extern int* FM_Index; // Fluid menu index
+
 extern bool particleSelected; // Se almacena si hay una particula seleccionada o no
 extern Vector2d pmz; // pmz: particle monitor zoom
 

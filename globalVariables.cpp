@@ -4,24 +4,25 @@ using namespace Eigen;
 
 // En este archivo se inicializan las variables globales
 
-
-
 vector<Particle> particles;
 
 Particle* particlePointer = nullptr;
 
 Ui::MainWindow *globalUi;
 int herramientaSeleccionada = 0;
+int* FM_Index;
+
 bool particleSelected = false;
 Vector2d pmz(30.f, 30.f);
 
-float REST_DENS = 300.f;
-float GAS_CONST = 2000.f;
-float H = 16.f;
-float HSQ = H * H;
-float MASS = 2.5f;
-float VISC = 200.f;
-float DT = 0.0007f;
+// Valores por defecto
+float REST_DENS = props[0].REST_DENS;
+float GAS_CONST = props[0].GAS_CONST;
+float H = props[0].H;
+float HSQ = props[0].HSQ;
+float MASS = props[0].MASS;
+float VISC = props[0].VISC;
+float DT = props[0].DT;
 
 float r = 0.30980;
 float g = 0.25882;

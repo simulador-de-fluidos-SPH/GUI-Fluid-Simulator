@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle("Fluid Simulator");
 
     globalUi = ui;
+    // FM_Index = &ui->Fluid_Menu->currentIndex(); // Puntero al indice del menu de fluidos
 
     QIcon icon(":/new/images/Images/Logo.png");
     setWindowIcon(icon);

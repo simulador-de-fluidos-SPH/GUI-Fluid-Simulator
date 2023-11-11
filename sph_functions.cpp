@@ -1,4 +1,7 @@
+#include "ui_mainwindow.h"
+
 #include "sph_functions.h"
+#include "ui_functions.h"
 
 using namespace std;
 using namespace Eigen;
@@ -26,7 +29,10 @@ void InitSPH()
             if (particles.size() < DAM_PARTICLES) // Verifica si la cantidad de particulas es menor que DAM_PARTICLES
             {
                 float jitter = dist(gen); // Generar un valor aleatorio en el rango [0.0, 1.0] para introducir una variación de posición
-                particles.push_back(Particle(x + jitter, y, 0.30980f, 0.25882f, 0.70980f)); // Se crea un nuevo Particle y se añade al vector particles (x + jitter introduce la variación en x)
+                newParticle(x + jitter, y, globalUi->Fluid_Menu->currentIndex());
+                /*particles.push_back(Particle(x + jitter, y,
+                                             props[0].red, props[0].green, props[0].blue,  // Color RGB
+                                             props[0].REST_DENS, props[0].GAS_CONST, props[0].H, props[0].MASS, props[0].VISC, props[0].DT)); // Se crea un nuevo Particle y se añade al vector particles (x + jitter introduce la variación en x)*/
             }
             else
             {
