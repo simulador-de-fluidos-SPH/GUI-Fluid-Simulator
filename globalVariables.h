@@ -17,9 +17,11 @@ QT_END_NAMESPACE
 
 struct Particle
 {
-    Particle(float _x, float _y) : x(_x, _y), v(0.f, 0.f), f(0.f, 0.f), rho(0), p(0.f) {} // particle data structure
+    Particle(float _x, float _y, float _r, float _g, float _b)
+        : x(_x, _y), v(0.f, 0.f), f(0.f, 0.f), rho(0), p(0.f), red(_r), green(_g), blue(_b) {} // particle data structure
     Vector2d x, v, f; // stores position, velocity, and force for integration
-    float rho, p; // stores density (rho) and pressure values for SPH
+    float rho, p;     // stores density (rho) and pressure values for SPH
+    float red, green, blue; // particle colors
 };
 
 extern Ui::MainWindow* globalUi; // Conección con la ui de mainwindow
@@ -38,6 +40,10 @@ extern float HSQ;		 // radius^2 for optimization
 extern float MASS;		 // assume all particles have the same mass
 extern float VISC;       // viscosity constant
 extern float DT;	     // integration timestep
+
+extern float r;  // red color
+extern float g;  // green color
+extern float b;  // blue color
 
 extern float POLY6; // 4/(π * H⁸): Estima la densidad del fluido en función de la distancia con otras particulas
 extern float SPIKY_GRAD; // -10/(π * H⁵): Ayuda a calcular las fuerzas que actuan sobre una particula

@@ -58,17 +58,15 @@ void OpenGLSimulation::paintGL()
     glPointSize(H); // Ajusta el tamaño de los puntos a H
 
     glBegin(GL_POINTS); // Se inicializa la creación de puntos GL_POINTS
-    glColor3f(.3f, .2f, .8f); // Define el color de los puntos
 
     // Ciclo for que renderiza las particulas
     for (auto &p : particles) // Recorre las particulas del vector particles
     {
+        glColor3f(p.red, p.green, p.blue); // le da a opengl el color de los puntos
         if(particlePointer == &p){
 
             glColor3f(.6f, .4f, .3f); // Define el color de los puntos
             glVertex2f(p.x(0), p.x(1)); // Se muestra el vector normalizado en coordenadas norx nory
-
-            glColor3f(.3f, .2f, .8f); // Define el color de los puntos
         } else {
             glVertex2f(p.x(0), p.x(1)); // Se muestra el vector normalizado en coordenadas norx nory
         }
@@ -150,12 +148,12 @@ void OpenGLSimulation::mouseMoveEvent(QMouseEvent *e)
         int deltaY = e->y() - mousePressPos.y();
 
         // Calcula la velocidad en función de la distancia y un factor de escala
-        float scale = 0.1f; // Ajusta este valor según la velocidad deseada
+        float scale = 100.1f; // Ajusta este valor según la velocidad deseada
         float velx = static_cast<float>(deltaX) * scale;
         float vely = static_cast<float>(deltaY) * scale;
 
         // Crea una nueva partícula con la posición inicial en el punto de clic
-        particles.push_back(Particle(e->x(), height() - e->y()));
+        particles.push_back(Particle(e->x(), height() - e->y(), 0.30980f, 0.25882f, 0.70980f));
         // Asigna la velocidad a la última partícula en el vector
         if (!particles.empty()) {
             particles.back().v = Vector2d(velx, vely);
@@ -229,7 +227,7 @@ void OpenGLSimulation::particlePointerSetter(QMouseEvent *e){
         particleSelected = true;
     }
 
-    particlePointer = localPointer;
+    particlePointer = localPointer; // Asigna la dirección de la particula seleccionada a la variable global
 }
 
 /*void OpenGLSimulation::launchParticle(QMouseEvent *e)

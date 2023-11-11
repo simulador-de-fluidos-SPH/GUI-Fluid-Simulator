@@ -26,7 +26,7 @@ void InitSPH()
             if (particles.size() < DAM_PARTICLES) // Verifica si la cantidad de particulas es menor que DAM_PARTICLES
             {
                 float jitter = dist(gen); // Generar un valor aleatorio en el rango [0.0, 1.0] para introducir una variación de posición
-                particles.push_back(Particle(x + jitter, y)); // Se crea un nuevo Particle y se añade al vector particles (x + jitter introduce la variación en x)
+                particles.push_back(Particle(x + jitter, y, 0.30980f, 0.25882f, 0.70980f)); // Se crea un nuevo Particle y se añade al vector particles (x + jitter introduce la variación en x)
             }
             else
             {

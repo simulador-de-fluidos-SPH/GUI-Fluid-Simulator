@@ -23,6 +23,10 @@ float MASS = 2.5f;
 float VISC = 200.f;
 float DT = 0.0007f;
 
+float r = 0.30980;
+float g = 0.25882;
+float b = 0.70980;
+
 float EPS = H / 2;
 float BOUND_DAMPING = -0.5f;
 
