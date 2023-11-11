@@ -29,6 +29,9 @@ private slots:
     void on_ButtonDelete_clicked();
     void on_ButtonSplash_clicked();
     void on_ButtonSelect_clicked();
+    void on_actionStart_triggered();
+    void on_actionPause_triggered();
+    void on_actionRestar_triggered();
 };
 
 

@@ -49,8 +49,6 @@
    </attribute>
    <addaction name="actionStart"/>
    <addaction name="separator"/>
-   <addaction name="actionPause"/>
-   <addaction name="separator"/>
    <addaction name="actionRestar"/>
    <addaction name="separator"/>
   </widget>
@@ -1080,7 +1078,6 @@ border-radius:none;</string>
      <string>Tools</string>
     </property>
     <addaction name="actionStart"/>
-    <addaction name="actionPause"/>
     <addaction name="actionRestar"/>
    </widget>
    <addaction name="menuTools"/>
@@ -1125,15 +1122,6 @@ border-radius:none;</string>
    </property>
    <property name="text">
     <string>Restart</string>
-   </property>
-  </action>
-  <action name="actionPause">
-   <property name="icon">
-    <iconset resource="images.qrc">
-     <normaloff>:/new/images/Images/Pausar.png</normaloff>:/new/images/Images/Pausar.png</iconset>
-   </property>
-   <property name="text">
-    <string>Pause</string>
    </property>
   </action>
   <action name="actionStart">

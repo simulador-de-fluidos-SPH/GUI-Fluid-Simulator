@@ -11,6 +11,7 @@ Particle* particlePointer = nullptr;
 Ui::MainWindow *globalUi;
 int herramientaSeleccionada = 0;
 int* FM_Index;
+bool simulationActive = false;
 
 bool particleSelected = false;
 Vector2d pmz(30.f, 30.f);
@@ -36,7 +37,7 @@ float SPIKY_GRAD = -10.f / (M_PI * pow(H, 5.f));
 float VISC_LAP = 40.f / (M_PI * pow(H, 5.f));
 
 int MAX_PARTICLES = 2500;
-long unsigned int DAM_PARTICLES = 10;
+long unsigned int DAM_PARTICLES = 100;
 int BLOCK_PARTICLES = 250;
 
 int WINDOW_WIDTH = 750;

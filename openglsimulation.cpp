@@ -46,10 +46,14 @@ void OpenGLSimulation::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Borra los pixeles de la pantalla estableciendolos a el color definido en glClearColor
 
-    // Se llaman las funciones de cálculo de nueva posición
-    ComputeDensityPressure();
-    ComputeForces();
-    Integrate();
+    // Se pregunta si la simulación está activa para calcular nuevas posiciones
+    if(simulationActive){
+        // Se llaman las funciones de cálculo de nueva posición
+        ComputeDensityPressure();
+        ComputeForces();
+        Integrate();
+    }
+
 
     glEnable(GL_POINT_SMOOTH); // Le da forma circular a los puntos
 
@@ -85,9 +89,11 @@ void OpenGLSimulation::paintGL()
         fps++; // Cuenta un nuevo fps
     }
 
-    // un update() es equivalente a un fotograma
-    // update() Reinicia la función paintGL(), pausar basta con evitar la ejecución de update()
-    update();
+    // Se hace update si la simulación está activa
+    if(simulationActive){
+        update();
+    }
+
 
 }
 

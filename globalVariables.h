@@ -54,6 +54,7 @@ extern Data props[]; // Estructura que almacena los diferentes tipos de datos (d
 extern Ui::MainWindow* globalUi; // Conección con la ui de mainwindow
 extern int herramientaSeleccionada; // Variable que alamcenará la herramienta seleccionada por el usuario
 extern int* FM_Index; // Fluid menu index
+extern bool simulationActive; // Booleano que almacena si la sumación está activa o no
 
 extern bool particleSelected; // Se almacena si hay una particula seleccionada o no
 extern Vector2d pmz; // pmz: particle monitor zoom

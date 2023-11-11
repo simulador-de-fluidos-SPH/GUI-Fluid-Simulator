@@ -55,7 +55,7 @@ void MainWindow::toggleDockWidget()
     } else {
         ui->dockWidget->show();
         ui->widget->resize(this->width() - ui->dockWidget->width(), ui->widget->height()); // Modifica el tamaño del widget restandole la anchura del menú
-        ui->monitor->update(); // Reinicializa el monitor al abrir
+        ui->widget->update();
     }
 }
 
@@ -81,7 +81,8 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     // Ajusta el tamaño del QOpenGLWidget
     ui->widget->resize(newWidth, newHeight);
 
-    ui->widget->update();
+        ui->widget->update();
+
 }
 
 
@@ -117,4 +118,31 @@ void MainWindow::on_ButtonSplash_clicked()
 }
 
 
+
+
+void MainWindow::on_actionStart_triggered()
+{
+    simulationActive = !simulationActive; // cambia el estado de la simuación
+    if(simulationActive){
+        ui->widget->update();
+        ui->actionStart->setIcon(QIcon(":/new/images/Images/Pausar.png"));
+    } else {
+        ui->actionStart->setIcon(QIcon(":/new/images/Images/Start.png"));
+    }
+
+
+}
+
+
+void MainWindow::on_actionPause_triggered()
+{
+    simulationActive = false; // Pausa la simulación
+}
+
+
+void MainWindow::on_actionRestar_triggered()
+{
+    particles.clear(); // borra los elemenetos del vector particles
+    ui->widget->update();
+}
 
