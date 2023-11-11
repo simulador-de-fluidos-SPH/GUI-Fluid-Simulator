@@ -4,6 +4,7 @@
 // Estos son los headers del monitor de la particula seleccionada
 
 #include <QOpenGLFunctions>
+#include "globalVariables.h"
 
 //######################## Arch / Windows ########################
 #if defined(Q_OS_LINUX)
@@ -17,13 +18,6 @@
 #include <vector>
 
 using namespace Eigen;
-
-struct Particle
-{
-    Particle(float _x, float _y) : x(_x, _y), v(0.f, 0.f), f(0.f, 0.f), rho(0), p(0.f) {} // particle data structure
-    Vector2d x, v, f; // stores position, velocity, and force for integration
-    float rho, p; // stores density (rho) and pressure values for SPH
-};
 
 class particleMonitor: public QOpenGLWidget, public QOpenGLFunctions
 {

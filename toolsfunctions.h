@@ -2,14 +2,10 @@
 #define TOOLSFUNCTIONS_H
 
 #include <QMouseEvent>
+#include <globalVariables.h>
 
-class toolsfunctions
-{
-public:
-    toolsfunctions();
-
-protected:
-    void mousePressEvent(QMouseEvent *event);
-};
+void* selectParticle(QMouseEvent *e);
+void deleteParticle(QMouseEvent *e);
+void particlePointerSetter(QMouseEvent *e);
 
 #endif // TOOLSFUNCTIONS_H

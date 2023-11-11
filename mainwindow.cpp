@@ -2,10 +2,8 @@
 #include "ui_mainwindow.h"
 #include "particleproperties.h"
 #include <QPixmap>
-
-// Variables Globales
-Ui::MainWindow *globalUi;
-int herramientaSeleccionada = 0; // Variable que alamcenará la herramienta seleccionada por el usuario
+#include "globalVariables.h"
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)

@@ -24,17 +24,23 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    globalVariables.cpp \
     main.cpp \
     mainwindow.cpp \
     openglsimulation.cpp \
     particlemonitor.cpp \
-    particleproperties.cpp
+    particleproperties.cpp \
+    sph_functions.cpp \
+    ui_functions.cpp
 
 HEADERS += \
+    globalVariables.h \
     mainwindow.h \
     openglsimulation.h \
     particlemonitor.h \
-    particleproperties.h
+    particleproperties.h \
+    sph_functions.h \
+    ui_functions.h
 
 FORMS += \
     mainwindow.ui
@@ -49,3 +55,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     images.qrc
+

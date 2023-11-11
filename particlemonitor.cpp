@@ -11,18 +11,6 @@ particleMonitor::particleMonitor(QWidget *parent)
 using namespace std;
 using namespace Eigen;
 
-// La estructura particle está definida en particlemonitor.h
-
-extern bool particleSelected; // Se sabe si hay una particula seleccionada o no
-extern Particle* particlePointer; // Pide la dirección de memoria de la particula seleccionada
-
-// Se llaman las fuerzas de las particulas de openglsimulation para mostrar en el monitor
-extern Vector2d particlePVelocity;
-extern Vector2d particlePForce;
-extern Vector2d particlePFgrav;
-extern Vector2d particlePFpress;
-extern Vector2d particlePFvisc;
-extern Vector2d pmz;
 Vector2d arrEndX(pmz(1)*0.9, pmz(1)*0.1); // arrEndx: arrows End Delimitará donde se acaban de dibujar las flechas para el eje x
 Vector2d arrEndY(pmz(0)*0.1, pmz(0)*0.9); // arrEndy: arrows End Delimitará donde se acaban de dibujar las flechas para el eje y
 
