@@ -41,6 +41,7 @@ private:
     void mouseReleaseEvent(QMouseEvent *e);
     void particlePointerSetter(QMouseEvent *e);
     void deleteParticle(QMouseEvent *e);
+    void concentricForce();
     void launchParticle(QMouseEvent *e);
 
 };

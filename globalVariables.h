@@ -4,6 +4,7 @@
 /* En esta cabezera se nombran las variables para su uso en otros archivos,
 en globalVariables.cpp se inicializan las variables*/
 
+#include <QOpenGLFunctions>
 #include <QMainWindow>
 #include <Eigen/Dense>
 #include <vector>
@@ -62,6 +63,11 @@ extern Vector2d pmz; // pmz: particle monitor zoom
 extern Particle* particlePointer; // Puntero que almacenará la dirección de memoria de una particula
 
 extern vector<Particle> particles; // Se daclara un vector de tipo Particle llamado particles
+
+// --- TOOLS --- //
+extern bool concentricForceActive; // Almacena si la función de fuerza concentrica está activada o no
+extern QMouseEvent* mouseEvent; // Puntero que apunta a un evento de ratón
+// ------------- //
 
 extern float REST_DENS;  // rest density
 extern float GAS_CONST;  // const for equation of state

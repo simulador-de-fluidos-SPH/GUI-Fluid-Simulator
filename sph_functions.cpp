@@ -102,7 +102,7 @@ encuentra la particula, POLY6 normaliza la densidad*/
 }
 
 // Esta función calcula las fuerzas que actúan sobre cada partícula.
-void ComputeForces(void)
+void ComputeForces()
 {
     //#pragma omp parallel for
     for (auto &pi : particles) // primer iterador pi

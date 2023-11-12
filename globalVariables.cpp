@@ -16,6 +16,9 @@ bool simulationActive = false;
 bool particleSelected = false;
 Vector2d pmz(30.f, 30.f);
 
+bool concentricForceActive = false;
+QMouseEvent* mouseEvent;
+
 // Valores por defecto
 float REST_DENS = props[0].REST_DENS;
 float GAS_CONST = props[0].GAS_CONST;

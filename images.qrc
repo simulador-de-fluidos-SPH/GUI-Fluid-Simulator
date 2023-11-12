@@ -9,5 +9,6 @@
         <file>Images/Restart.png</file>
         <file>Images/Start.png</file>
         <file>Images/Menu.jpg</file>
+        <file>Images/Explosion.png</file>
     </qresource>
 </RCC>

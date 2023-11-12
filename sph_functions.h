@@ -12,6 +12,6 @@ Vector2d norMagnitude(Vector2d f, float rho);
 void InitSPH();
 void Integrate(void);
 void ComputeDensityPressure(void);
-void ComputeForces(void);
+void ComputeForces();
 
 #endif // SPH_FUNCTIONS_H
