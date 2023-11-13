@@ -261,7 +261,7 @@ void OpenGLSimulation::concentricForce(){
     /* Se llaman las tres funciones de la simulación, compute forces se sobre escribe para que acepte una fuerza externa
         en una particula en particular */
     ComputeDensityPressure();
-    //#pragma omp parallel for
+    #pragma omp parallel for
     for (auto &pi : particles) // primer iterador pi
     {
         Vector2d fpress(0.f, 0.f);
