@@ -10,5 +10,9 @@
         <file>Images/Start.png</file>
         <file>Images/Menu.jpg</file>
         <file>Images/Explosion.png</file>
+        <file>Images/Backward.png</file>
+        <file>Images/Forward.png</file>
+        <file>Images/LargeBackward.png</file>
+        <file>Images/LargeForward.png</file>
     </qresource>
 </RCC>

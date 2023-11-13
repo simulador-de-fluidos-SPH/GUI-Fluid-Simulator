@@ -57,6 +57,9 @@ void OpenGLSimulation::paintGL()
             ComputeForces();
             Integrate();
         }
+        particlesBackup.push_back(particles); // se añade el esta de particles al backup
+        cout << particlesBackup.size() * 96 * particles.size() / 1000000.0f << "MB" << endl;
+
     }
 
     glEnable(GL_POINT_SMOOTH); // Le da forma circular a los puntos
@@ -94,9 +97,9 @@ void OpenGLSimulation::paintGL()
     }
 
     // Se hace update si la simulación está activa
-    if(simulationActive){
+
         update();
-    }
+
 
 
 }
@@ -118,6 +121,8 @@ void OpenGLSimulation::resizeGL(int w, int h)
     glOrtho(0.0, VIEW_WIDTH, 0.0, VIEW_HEIGHT, -1.0, 1.0); // Configura la cámara para que apunte y tenga el tamaño del openGLWidget
 
 }
+
+
 
 // -------------------------------------------- TOOLS -------------------------------------------- //
 

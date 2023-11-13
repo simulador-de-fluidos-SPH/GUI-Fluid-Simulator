@@ -32,6 +32,10 @@ private slots:
     void on_actionStart_triggered();
     void on_actionPause_triggered();
     void on_actionRestar_triggered();
+    void on_actionForward_triggered();
+    void on_actionBack_triggered();
+    void on_actionLargeForward_triggered();
+    void on_actionLargeBackward_triggered();
 };
 
 

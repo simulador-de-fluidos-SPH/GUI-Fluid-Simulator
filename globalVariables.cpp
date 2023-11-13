@@ -5,6 +5,8 @@ using namespace Eigen;
 // En este archivo se inicializan las variables globales
 
 vector<Particle> particles;
+vector<vector<Particle>> particlesBackup;
+long unsigned int stepIndex;
 
 Particle* particlePointer = nullptr;
 
@@ -22,8 +24,8 @@ QMouseEvent* mouseEvent;
 // Valores por defecto
 float REST_DENS = props[0].REST_DENS;
 float GAS_CONST = props[0].GAS_CONST;
-float H = props[0].H;
-float HSQ = props[0].HSQ;
+float H = 16.0f;
+float HSQ = H * H;
 float MASS = props[0].MASS;
 float VISC = props[0].VISC;
 float DT = props[0].DT;

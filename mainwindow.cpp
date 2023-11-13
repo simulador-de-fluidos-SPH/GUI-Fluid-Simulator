@@ -4,6 +4,7 @@
 #include <QPixmap>
 #include "globalVariables.h"
 #include <iostream>
+#include <ui_functions.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -126,6 +127,8 @@ void MainWindow::on_actionStart_triggered()
     if(simulationActive){
         ui->widget->update();
         ui->actionStart->setIcon(QIcon(":/new/images/Images/Pausar.png"));
+        particlesBackup.erase(particlesBackup.end() - stepIndex, particlesBackup.end()); // Borra los últimos stepIndex elementos del historial
+        stepIndex = 0; // resetea el stepIndex
     } else {
         ui->actionStart->setIcon(QIcon(":/new/images/Images/Start.png"));
     }
@@ -146,3 +149,46 @@ void MainWindow::on_actionRestar_triggered()
     ui->widget->update();
 }
 
+void MainWindow::on_actionBack_triggered()
+{
+    simulationActive = false;
+    ui->actionStart->setIcon(QIcon(":/new/images/Images/Start.png"));
+    if(stepIndex < particlesBackup.size() - 1){
+        stepIndex++;
+    }
+    timeStep();
+}
+
+void MainWindow::on_actionForward_triggered()
+{
+    simulationActive = false;
+    ui->actionStart->setIcon(QIcon(":/new/images/Images/Start.png"));
+    if(stepIndex > 0){
+    stepIndex--;
+    }
+    timeStep();
+}
+
+void MainWindow::on_actionLargeBackward_triggered()
+{
+    simulationActive = false;
+    ui->actionStart->setIcon(QIcon(":/new/images/Images/Start.png"));
+    if(stepIndex < particlesBackup.size() - 20){
+    stepIndex += 20;
+    } else {
+    stepIndex = particlesBackup.size() - 1;
+    }
+    timeStep();
+}
+
+void MainWindow::on_actionLargeForward_triggered()
+{
+    simulationActive = false;
+    ui->actionStart->setIcon(QIcon(":/new/images/Images/Start.png"));
+    if(stepIndex >= 20){
+    stepIndex -= 20;
+    } else {
+    stepIndex = 0;
+    }
+    timeStep();
+}
