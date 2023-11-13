@@ -75,7 +75,7 @@ void OpenGLSimulation::paintGL()
         glColor3f(p.red, p.green, p.blue); // le da a opengl el color de los puntos
         if(particlePointer == &p){
 
-            glColor3f(.6f, .4f, .3f); // Define el color de los puntos
+            glColor3f( 0.98039f, 0.98039f, 0.20000f ); // Define el color de los puntos
             glVertex2f(p.x(0), p.x(1)); // Se muestra el vector normalizado en coordenadas norx nory
         } else {
             glVertex2f(p.x(0), p.x(1)); // Se muestra el vector normalizado en coordenadas norx nory

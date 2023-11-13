@@ -1061,7 +1061,7 @@ border-radius:none;</string>
      </property>
      <property name="icon">
       <iconset resource="images.qrc">
-       <normaloff>:/new/images/Images/Objeto.png</normaloff>:/new/images/Images/Objeto.png</iconset>
+       <normaloff>:/new/images/Images/Seleccionar.png</normaloff>:/new/images/Images/Seleccionar.png</iconset>
      </property>
      <property name="iconSize">
       <size>

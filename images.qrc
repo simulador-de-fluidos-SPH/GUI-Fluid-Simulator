@@ -14,5 +14,6 @@
         <file>Images/Forward.png</file>
         <file>Images/LargeBackward.png</file>
         <file>Images/LargeForward.png</file>
+        <file>Images/Seleccionar.png</file>
     </qresource>
 </RCC>
