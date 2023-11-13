@@ -1099,6 +1099,9 @@ border-radius:none;</string>
    <property name="text">
     <string>Restart</string>
    </property>
+   <property name="shortcut">
+    <string>R</string>
+   </property>
   </action>
   <action name="actionStart">
    <property name="icon">
@@ -1107,6 +1110,9 @@ border-radius:none;</string>
    </property>
    <property name="text">
     <string>Start</string>
+   </property>
+   <property name="shortcut">
+    <string>Space</string>
    </property>
   </action>
   <action name="actionBack">
@@ -1120,6 +1126,9 @@ border-radius:none;</string>
    <property name="toolTip">
     <string>Backward</string>
    </property>
+   <property name="shortcut">
+    <string>Left</string>
+   </property>
   </action>
   <action name="actionForward">
    <property name="icon">
@@ -1131,6 +1140,9 @@ border-radius:none;</string>
    </property>
    <property name="toolTip">
     <string>Forward</string>
+   </property>
+   <property name="shortcut">
+    <string>Right</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
@@ -1147,6 +1159,9 @@ border-radius:none;</string>
    <property name="toolTip">
     <string>LargeForward</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Right</string>
+   </property>
    <property name="menuRole">
     <enum>QAction::TextHeuristicRole</enum>
    </property>
@@ -1161,6 +1176,9 @@ border-radius:none;</string>
    </property>
    <property name="toolTip">
     <string>LargeBackward</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Left</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>

@@ -36,7 +36,7 @@ protected:
 
 private:
     void plano();
-    void vectorRender(Particle* p);
+    void vectorRender();
 };
 
 #endif // PARTICLEMONITOR_H

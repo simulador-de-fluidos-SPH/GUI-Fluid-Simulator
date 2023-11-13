@@ -39,7 +39,7 @@ void particleMonitor::paintGL()
     glVertex3f(0.0f, 0.0f, 0.1f);
     glEnd();
 
-    vectorRender(particlePointer); // Se mostrarán los vectores si el puntero apunta a una particula
+    vectorRender(); // Se mostrarán los vectores si el puntero apunta a una particula
 
     update();
 
@@ -57,9 +57,9 @@ void particleMonitor::resizeGL(int w, int h)
 }
 
 // Renderiza los vectores del monitor
-void particleMonitor::vectorRender(Particle* particlePointer){ // Recibe un elemento tipo Particle
+void particleMonitor::vectorRender(){ // Recibe un elemento tipo Particle
     if(particleSelected){ // Se consulta si la particula está seleccionada
-       Particle p = *particlePointer;
+       // Particle p = *particlePointer;
 
         // Imagen del vector fuerza de gravedad
         glLineWidth(3.0f);
@@ -102,7 +102,7 @@ void particleMonitor::vectorRender(Particle* particlePointer){ // Recibe un elem
         glEnd();
 
 
-        printf("\n\nv: (%f, %f) \nf: (%f, %f)\nrho: %f", p.v(0) * p.rho, p.v(1) * p.rho, p.f(0) * p.rho, p.f(1) * p.rho, p.rho);
+        //printf("\n\nv: (%f, %f) \nf: (%f, %f)\nrho: %f", p.v(0) * p.rho, p.v(1) * p.rho, p.f(0) * p.rho, p.f(1) * p.rho, p.rho);
         //printf("\n\nG: (%f, %f) \nrho: %f", particlePointerFgrav(0), particlePointerFgrav(1), p.rho);
     }
 

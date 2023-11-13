@@ -58,7 +58,7 @@ void OpenGLSimulation::paintGL()
             Integrate();
         }
         particlesBackup.push_back(particles); // se añade el esta de particles al backup
-        cout << particlesBackup.size() * 96 * particles.size() / 1000000.0f << "MB" << endl;
+        // cout << particlesBackup.size() * 96 * particles.size() / 1000000.0f << "MB" << endl;
 
     }
 
@@ -96,11 +96,7 @@ void OpenGLSimulation::paintGL()
         fps++; // Cuenta un nuevo fps
     }
 
-    // Se hace update si la simulación está activa
-
         update();
-
-
 
 }
 

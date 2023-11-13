@@ -146,6 +146,8 @@ void MainWindow::on_actionPause_triggered()
 void MainWindow::on_actionRestar_triggered()
 {
     particles.clear(); // borra los elemenetos del vector particles
+    stepIndex = 0;
+    particlesBackup.clear(); // borra el registro anterior
     ui->widget->update();
 }
 
@@ -153,7 +155,7 @@ void MainWindow::on_actionBack_triggered()
 {
     simulationActive = false;
     ui->actionStart->setIcon(QIcon(":/new/images/Images/Start.png"));
-    if(stepIndex < particlesBackup.size() - 1){
+    if(stepIndex < particlesBackup.size() - 1 && (particlesBackup.size() > 0)){
         stepIndex++;
     }
     timeStep();
@@ -163,7 +165,7 @@ void MainWindow::on_actionForward_triggered()
 {
     simulationActive = false;
     ui->actionStart->setIcon(QIcon(":/new/images/Images/Start.png"));
-    if(stepIndex > 0){
+    if(stepIndex > 0 && (particlesBackup.size() > 0)){
     stepIndex--;
     }
     timeStep();
@@ -173,7 +175,7 @@ void MainWindow::on_actionLargeBackward_triggered()
 {
     simulationActive = false;
     ui->actionStart->setIcon(QIcon(":/new/images/Images/Start.png"));
-    if(stepIndex < particlesBackup.size() - 20){
+    if(stepIndex < particlesBackup.size() - 20 && (particlesBackup.size() > 20)){
     stepIndex += 20;
     } else {
     stepIndex = particlesBackup.size() - 1;
@@ -185,7 +187,7 @@ void MainWindow::on_actionLargeForward_triggered()
 {
     simulationActive = false;
     ui->actionStart->setIcon(QIcon(":/new/images/Images/Start.png"));
-    if(stepIndex >= 20){
+    if(stepIndex >= 20 && (particlesBackup.size() > 0)){
     stepIndex -= 20;
     } else {
     stepIndex = 0;
