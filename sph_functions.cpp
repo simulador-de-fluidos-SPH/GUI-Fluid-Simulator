@@ -41,7 +41,7 @@ void InitSPH()
 
 void Integrate(void)
 {
-    //#pragma omp parallel for
+    #pragma omp parallel for
     for (auto &p : particles) // Recorre las particulas del vector particles
     {
         // forward Euler integration
@@ -76,7 +76,7 @@ void Integrate(void)
 // Esta función calcula la densidad y la presión para cada partícula en base las particulas de su alrededor.
 void ComputeDensityPressure(void)
 {
-    //#pragma omp parallel for
+    #pragma omp parallel for
     for (auto &pi : particles) // primer iterador pi
     {
         pi.rho = 0.f; // presión de la particula = 0
@@ -104,7 +104,7 @@ encuentra la particula, POLY6 normaliza la densidad*/
 // Esta función calcula las fuerzas que actúan sobre cada partícula.
 void ComputeForces()
 {
-    //#pragma omp parallel for
+    #pragma omp parallel for
     for (auto &pi : particles) // primer iterador pi
     {
         Vector2d fpress(0.f, 0.f);
@@ -133,7 +133,6 @@ se resta **la diferencia de velocidad entre pj y pi para determinar la magnitud 
         }
         Vector2d fgrav = G * pi.MASS / pi.rho; // La fuerza de gravedad por la masa partido entre la desnsidad de particulas el punto de la particula pi
         pi.f = fpress + fvisc + fgrav; // Es la sumatoria de la fuerza de presión, viscocidad y gravedad
-
         // Se normalizan las fuerzas que se mostrarán en pantalla
         if(&pi == particlePointer){ // Si la particula iterada es la particula seleccionada guardar las fuerzas
             particlePVelocity = norMagnitude(pi.v, pi.rho);

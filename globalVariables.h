@@ -47,12 +47,15 @@ struct Data {
     float DT;
 };
 
+
 extern Data props[]; // Estructura que almacena los diferentes tipos de datos (definición en "particleproperties.cpp")
 
 extern Ui::MainWindow* globalUi; // Conección con la ui de mainwindow
 extern int herramientaSeleccionada; // Variable que alamcenará la herramienta seleccionada por el usuario
 extern int* FM_Index; // Fluid menu index
 extern bool simulationActive; // Booleano que almacena si la sumación está activa o no
+
+extern float proxRho; // Valor aproximado de rho
 
 extern bool particleSelected; // Se almacena si hay una particula seleccionada o no
 extern Vector2d pmz; // pmz: particle monitor zoom
@@ -66,7 +69,13 @@ extern long unsigned int stepIndex; // stepIndex es la cantidad de pasos que se 
 
 // --- TOOLS --- //
 extern bool concentricForceActive; // Almacena si la función de fuerza concentrica está activada o no
+extern float concentricForceMag; // Magnitud de fuerza concéntrica
 extern QMouseEvent* mouseEvent; // Puntero que apunta a un evento de ratón
+extern bool deletePressed;
+
+extern bool launchPressed; // Almacena si la opción de launch fue presionada
+extern Vector2d launchInitPos; // Posición donde se presiono el mouse con la opción de lanzar
+extern Vector2d mouseMovePosition; // Posición del ratón al moverse
 // ------------- //
 
 extern float REST_DENS;  // rest density

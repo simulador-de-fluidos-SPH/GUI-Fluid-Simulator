@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->dockWidget->setMinimumSize(290, 290);
 
     // Para que el menu no se muestre al inicio
-    ui->dockWidget->setVisible(false);
+    ui->dockWidget->setVisible(true);
 
     // Se crea la accion "actionMenu" encargada de abrir y cerrar el menu
     QAction * actionMenu = new QAction("Menu", this);
@@ -113,11 +113,6 @@ void MainWindow::on_ButtonDelete_clicked()
 }
 
 
-void MainWindow::on_ButtonSplash_clicked()
-{
-    herramientaSeleccionada = 4;
-}
-
 
 
 
@@ -194,3 +189,17 @@ void MainWindow::on_actionLargeForward_triggered()
     }
     timeStep();
 }
+
+void MainWindow::on_gx_valueChanged(double arg1)
+{
+    Vector2d newGravity(arg1, G(1)); // Se asigna nueva fuerza de gravedad en x
+    G = newGravity;
+}
+
+
+void MainWindow::on_gy_valueChanged(double arg1)
+{
+    Vector2d newGravity(G(0), arg1); // Se asigna nueva fuerza de gravedad en y
+    G = newGravity;
+}
+

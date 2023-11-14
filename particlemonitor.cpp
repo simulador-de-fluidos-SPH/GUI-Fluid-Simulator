@@ -32,12 +32,7 @@ void particleMonitor::paintGL()
 
     plano(); // Se crea el plano
 
-    glEnable(GL_POINT_SMOOTH);
-    glPointSize(8.0f);
-    glBegin(GL_POINTS);
-    glColor3f(18.0f/255.0f, 215.0f/255.0f, 23.0f/255.0f);
-    glVertex3f(0.0f, 0.0f, 0.1f);
-    glEnd();
+
 
     vectorRender(); // Se mostrarán los vectores si el puntero apunta a una particula
 
@@ -60,6 +55,13 @@ void particleMonitor::resizeGL(int w, int h)
 void particleMonitor::vectorRender(){ // Recibe un elemento tipo Particle
     if(particleSelected){ // Se consulta si la particula está seleccionada
        // Particle p = *particlePointer;
+
+        glEnable(GL_POINT_SMOOTH);
+        glPointSize(11.0f);
+        glBegin(GL_POINTS);
+        glColor3f(18.0f/255.0f, 215.0f/255.0f, 23.0f/255.0f);
+        glVertex3f(0.0f, 0.0f, 0.1f);
+        glEnd();
 
         // Imagen del vector fuerza de gravedad
         glLineWidth(3.0f);

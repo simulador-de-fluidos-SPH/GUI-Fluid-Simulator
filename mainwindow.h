@@ -27,7 +27,6 @@ private slots:
     void on_ButtonThrow_clicked();
     void on_ButtonExplosion_clicked();
     void on_ButtonDelete_clicked();
-    void on_ButtonSplash_clicked();
     void on_ButtonSelect_clicked();
     void on_actionStart_triggered();
     void on_actionPause_triggered();
@@ -36,6 +35,8 @@ private slots:
     void on_actionBack_triggered();
     void on_actionLargeForward_triggered();
     void on_actionLargeBackward_triggered();
+    void on_gx_valueChanged(double arg1);
+    void on_gy_valueChanged(double arg1);
 };
 
 

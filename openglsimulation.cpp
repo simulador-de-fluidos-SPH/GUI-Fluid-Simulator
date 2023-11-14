@@ -75,13 +75,23 @@ void OpenGLSimulation::paintGL()
         glColor3f(p.red, p.green, p.blue); // le da a opengl el color de los puntos
         if(particlePointer == &p){
 
-            glColor3f( 0.98039f, 0.98039f, 0.20000f ); // Define el color de los puntos
+            glColor3f( 0.90039f, 0.90039f, 0.14000f ); // Define el color de los puntos
             glVertex2f(p.x(0), p.x(1)); // Se muestra el vector normalizado en coordenadas norx nory
         } else {
             glVertex2f(p.x(0), p.x(1)); // Se muestra el vector normalizado en coordenadas norx nory
         }
     }
     glEnd();
+
+    // Renderización de la linea de lanzamiento de particula si la opción está activada
+    if(launchPressed){
+        glLineWidth(7.0f);
+        glBegin(GL_LINES);
+        glColor3f(0.1f, 0.1f, 0.1f);
+        glVertex3f(launchInitPos(0), launchInitPos(1), 1.0f);
+        glVertex3f(mouseMovePosition(0), mouseMovePosition(1), 1.0f);
+        glEnd();
+    }
 
     glBegin(GL_POINTS);
     glColor3f(.8, .8, .3); // Define el color de los puntos
@@ -131,28 +141,44 @@ void OpenGLSimulation::mousePressEvent(QMouseEvent *e)
         int hs = herramientaSeleccionada;
 
         // Se comprueba que botón fue presionado para saber que función ejecutar
-        if(hs == 2){
+        if(hs == 1){
+            // cout << "Herramienta seleccionada = 1" << endl;
+            #if defined(Q_OS_LINUX)
+                    QPointF positionElement = e->localPos();
+            #elif defined(Q_OS_WINDOWS)
+                    QPointF positionElement = e->position();
+            #endif
+
+            float x = positionElement.x();
+            float y = (height() - positionElement.y());
+            Vector2d currentPosition(x,y);
+            launchInitPos = currentPosition; // Posición incicial de click
+            mouseMovePosition = currentPosition; // posición inicial de movimiento
+            launchPressed = true;
+        }
+        else if(hs == 2){
             concentricForceActive = true;
+            //globalUi->concentricForce->setText(QString::number(concentricForceMag / proxRho / 100, 'f', 2));
         } else if(hs == 3) {
             deleteParticle(e);
+            deletePressed = true;
         } else {
             particlePointerSetter(e);
         }
-        // hs == 3 ? deleteParticle(e) : hs == 2 ? concentricForceActive = true : particlePointerSetter(e);
 
         /*
         FUNCIONES PARA IMPLEMENTAR (índice)
-        0: Función para seleccionar particula (v) [Por defecto]
-        1: Función para crear particula (x)
-        2: Función de Fuerza concénttrica (v)
+        0: Función para seleccionar particula (v) [Por defecto botón izquierdo]
+        1: Función para crear particula (v) [por defecto botón derecho]
+        2: Función de Fuerza concéntrica (v)
         3: Función de eliminar particula (v)
-        4: Función de splash (x)
+        4: Función de lanzar particula (v)
         */
-
 
     } else if (e->button() == Qt::RightButton)
     { // Funciones para lanzar una partícula desde cualquier dirección
         mPressed = true;
+        newParticle(e->x(), height() - e->y(), globalUi->Fluid_Menu->currentIndex());
         mousePressPos = e->pos(); // Almacena la posición de presionado
     }
     mousePos = e->pos();
@@ -162,8 +188,28 @@ void OpenGLSimulation::mouseMoveEvent(QMouseEvent *e)
 {
     mouseEvent = e;
     mousePos = e->pos();
+    if(launchPressed){
+
+        #if defined(Q_OS_LINUX)
+                QPointF positionElement = e->localPos();
+        #elif defined(Q_OS_WINDOWS)
+                QPointF positionElement = e->position();
+        #endif
+        float x = positionElement.x();
+        float y = (height() - positionElement.y());
+        Vector2d currentPosition(x,y);
+        mouseMovePosition = currentPosition;
+
+        Vector2d velocity = (mouseMovePosition - launchInitPos);
+        float mag = (velocity * velocity.norm() * -1).norm() * proxRho / 100;
+
+        globalUi->throwSpeed->setText(QString::number(mag, 'f', 2)); // Se asigna un valor a la casilla de velocidad de lanzamiento
+    }
     if (mPressed)
     {
+        newParticle(e->x(), height() - e->y(), globalUi->Fluid_Menu->currentIndex());
+    }
+    /*{
         // Calcula la distancia entre la posición actual y la posición de presionado
         int deltaX = e->x() - mousePressPos.x();
         int deltaY = e->y() - mousePressPos.y();
@@ -179,23 +225,37 @@ void OpenGLSimulation::mouseMoveEvent(QMouseEvent *e)
         if (!particles.empty()) {
             particles.back().v = Vector2d(velx, vely);
         }
+    }*/
+    if(deletePressed){
+       deleteParticle(e);
     }
 }
 
 void OpenGLSimulation::mouseReleaseEvent(QMouseEvent *e)
 {
     mouseEvent = e;
-    if (e->button() == Qt::RightButton)
-    {
-        mPressed = false;
-    }
+    mPressed = false;
     concentricForceActive = false; // Se desactiva concenctricForce si estaba activada
+    deletePressed = false;
+    if(launchPressed){
+
+       newParticle(launchInitPos(0), launchInitPos(1), globalUi->Fluid_Menu->currentIndex());
+
+       Vector2d velocity = (mouseMovePosition - launchInitPos);
+       velocity = velocity * velocity.norm() * -1;
+
+       particles.back().v = velocity;
+       particlePointer = &particles.back();
+       particleSelected = true;
+       globalUi->throwSpeed->setText(QString::number(0, 'f', 2));
+
+       launchPressed = false;
+    }
 }
 
 // Función para seleccionar una particula y devuelve la dirección de memoria de la particula seleccionada como dirección void no Particle
 void* OpenGLSimulation::selectParticle(QMouseEvent *e){
 
-    // ################# Arch / Windows #################
 #if defined(Q_OS_LINUX)
     QPointF positionElement = e->localPos();
 #elif defined(Q_OS_WINDOWS)
@@ -205,8 +265,8 @@ void* OpenGLSimulation::selectParticle(QMouseEvent *e){
     Particle* localPointer = nullptr;
 
     float minDiff = H; // Minima diferencia para que la selección sea valida
-    float positionx = positionElement.x() * WINDOW_WIDTH / width(); // Se encuentra y normaliza la coordenada x
-    float positiony = (height() - positionElement.y()) * VIEW_HEIGHT / height(); // Se encuentra y normaliza la coordenada y
+    float positionx = positionElement.x();
+    float positiony = (height() - positionElement.y());
 
     Vector2d pos(positionx, positiony); // Se define un vector con lo antes encontrado
 
@@ -230,14 +290,26 @@ void OpenGLSimulation::deleteParticle(QMouseEvent *e){
     for (auto it = particles.begin(); it != particles.end(); ++it) { // ciclo que recorre el vector de particulas
         if (&(*it) == localPointer) {
             particles.erase(it); // Elimina la partícula cuando la encuentra
-            if(localPointer == particlePointer){ // En caso de que la particula eliminada sea la seleccionada globalmente el puntero se volverá null
-                particleSelected = false;
-                particlePointer = nullptr;
-            }
+            particleSelected = false;
+            particlePointer = nullptr;
             break;
         }
     }
 }
+
+/*void OpenGLSimulation::launchParticle(QMouseEvent *e)
+{
+#if defined(Q_OS_LINUX)
+    QPointF positionElement = e->localPos();
+#elif defined(Q_OS_WINDOWS)
+    QPointF positionElement = e->position();
+#endif
+
+    float positionX = positionElement.x() * WINDOW_WIDTH / width();
+    float positionY = (height() - positionElement.y()) * VIEW_HEIGHT / height();
+
+}*/
+
 
 // Función para asignarle a la variable global particlePointer la particula tocada o null si no fue tocada una particula
 void OpenGLSimulation::particlePointerSetter(QMouseEvent *e){
@@ -261,7 +333,7 @@ void OpenGLSimulation::concentricForce(){
     /* Se llaman las tres funciones de la simulación, compute forces se sobre escribe para que acepte una fuerza externa
         en una particula en particular */
     ComputeDensityPressure();
-    //#pragma omp parallel for
+    #pragma omp parallel for
     for (auto &pi : particles) // primer iterador pi
     {
         Vector2d fpress(0.f, 0.f);
@@ -286,7 +358,7 @@ void OpenGLSimulation::concentricForce(){
         pi.f = fpress + fvisc + fgrav;
 
         // Comprueba si la particula está suficientemente cerca del punto de click para ser afectada, de ser así, se añade la fuerza externa al cálculo
-        if ((pi.x - pos).norm() <= H)
+        if ((pi.x - pos).norm() <= 2 * H)
         {
             Vector2d externalForce;
             float angulo;
@@ -299,11 +371,10 @@ void OpenGLSimulation::concentricForce(){
             angulo = atan2(dy, dx);
 
             // Aplicar la fuerza externa
-            externalForce = Vector2d(cos(angulo), sin(angulo)) * 10000.0f * -1;
+            externalForce = Vector2d(cos(angulo), sin(angulo)) * globalUi->concentricForceMag->value() / proxRho * -1;
 
             pi.f += externalForce;
         }
-
 
         // Se normalizan las fuerzas que se mostrarán en pantalla
         if(&pi == particlePointer){ // Si la particula iterada es la particula seleccionada guardar las fuerzas
@@ -318,15 +389,3 @@ void OpenGLSimulation::concentricForce(){
 }
 
 
-/*void OpenGLSimulation::launchParticle(QMouseEvent *e)
-{
-#if defined(Q_OS_LINUX)
-    QPointF positionElement = e->localPos();
-#elif defined(Q_OS_WINDOWS)
-    QPointF positionElement = e->position();
-#endif
-
-    float positionX = positionElement.x() * WINDOW_WIDTH / width();
-    float positionY = (height() - positionElement.y()) * VIEW_HEIGHT / height();
-
-}*/
