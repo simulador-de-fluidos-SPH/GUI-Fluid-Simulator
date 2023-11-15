@@ -24,6 +24,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    energychart.cpp \
     globalVariables.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -34,6 +35,7 @@ SOURCES += \
     ui_functions.cpp
 
 HEADERS += \
+    energychart.h \
     globalVariables.h \
     mainwindow.h \
     openglsimulation.h \

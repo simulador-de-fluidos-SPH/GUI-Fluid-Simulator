@@ -21,6 +21,8 @@ void modUiData(){
 void newParticle(float _x, float _y, int index){
     particles.push_back(Particle(_x, _y, props[index].red, props[index].green, props[index].blue,  // Color RGB
                         props[index].REST_DENS, props[index].GAS_CONST, props[index].MASS, props[index].VISC, props[index].DT));
+    particlePointer = &particles.back();
+    particleSelected = true;
 
     globalUi->widget->update();
 }

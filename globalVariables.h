@@ -67,6 +67,12 @@ extern vector<vector<Particle>> particlesBackup; // Vector de vectores particles
 
 extern long unsigned int stepIndex; // stepIndex es la cantidad de pasos que se devuelve el timeStepper
 
+// --- Energy --- //
+extern float kineticE;
+extern float potentialE;
+extern float mechanicalE;
+// -------------- //
+
 // --- TOOLS --- //
 extern bool concentricForceActive; // Almacena si la función de fuerza concentrica está activada o no
 extern float concentricForceMag; // Magnitud de fuerza concéntrica

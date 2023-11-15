@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>497</height>
+    <width>1000</width>
+    <height>650</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -83,7 +83,7 @@
     <widget class="QPushButton" name="ButtonThrow">
      <property name="geometry">
       <rect>
-       <x>120</x>
+       <x>100</x>
        <y>280</y>
        <width>41</width>
        <height>41</height>
@@ -187,7 +187,7 @@
     <widget class="QPushButton" name="ButtonExplosion">
      <property name="geometry">
       <rect>
-       <x>120</x>
+       <x>100</x>
        <y>340</y>
        <width>41</width>
        <height>41</height>
@@ -217,7 +217,7 @@
     <widget class="QPushButton" name="ButtonDelete">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>30</x>
        <y>340</y>
        <width>41</width>
        <height>41</height>
@@ -812,7 +812,7 @@ border-radius:none;</string>
     <widget class="QPushButton" name="ButtonSelect">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>30</x>
        <y>280</y>
        <width>41</width>
        <height>41</height>
@@ -842,7 +842,7 @@ border-radius:none;</string>
     <widget class="QFrame" name="F_throwSpeed">
      <property name="geometry">
       <rect>
-       <x>180</x>
+       <x>160</x>
        <y>300</y>
        <width>61</width>
        <height>18</height>
@@ -888,7 +888,7 @@ border-radius:none;</string>
     <widget class="QLabel" name="L_throw_speed">
      <property name="geometry">
       <rect>
-       <x>180</x>
+       <x>160</x>
        <y>279</y>
        <width>61</width>
        <height>21</height>
@@ -907,7 +907,7 @@ border-radius:none;</string>
     <widget class="QLabel" name="L_throw_speed_2">
      <property name="geometry">
       <rect>
-       <x>180</x>
+       <x>160</x>
        <y>340</y>
        <width>61</width>
        <height>21</height>
@@ -1042,7 +1042,7 @@ border-radius:none;</string>
     <widget class="QDoubleSpinBox" name="concentricForceMag">
      <property name="geometry">
       <rect>
-       <x>180</x>
+       <x>160</x>
        <y>360</y>
        <width>71</width>
        <height>20</height>
@@ -1088,6 +1088,175 @@ border-radius:none;</string>
      <property name="text">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;FPS:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
+    </widget>
+    <widget class="QFrame" name="EnergyChart_Frame">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>460</y>
+       <width>151</width>
+       <height>121</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: white;
+border-style: outset;
+border-width: 2px;
+padding:4px;
+border-radius: 10px;
+border-color: black;
+
+
+     </string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="EnergyChart" name="EnergyChartScreen" native="true">
+      <property name="geometry">
+       <rect>
+        <x>5</x>
+        <y>5</y>
+        <width>141</width>
+        <height>111</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QLabel" name="L_energy">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>430</y>
+       <width>131</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #FFFFFF</string>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;ENERGY&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="L_energy_mechanical">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>550</y>
+       <width>111</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #B4B400</string>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Mechanincal&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="L_energy_potencial">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>510</y>
+       <width>111</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #1EC82D</string>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Potential&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="L_energy_kinetic">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>470</y>
+       <width>111</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #40E0D0</string>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Kinetic&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="L_throw_angle">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>280</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Throw Speed</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #FFFFFF</string>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;D°&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QFrame" name="F_throwSpeed_2">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>300</y>
+       <width>51</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Throw Speed</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: white;
+border-style: outset;
+border-width: 1px;
+border-radius: 5px;
+border-color: black;
+z-index: 10;</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QLabel" name="throwSpeed_Direction">
+      <property name="geometry">
+       <rect>
+        <x>4</x>
+        <y>0</y>
+        <width>41</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-left: none;
+border-right: none;
+border-bottom: none;
+border-radius:none;</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;0&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>
@@ -1202,6 +1371,12 @@ border-radius:none;</string>
    <class>particleMonitor</class>
    <extends>QWidget</extends>
    <header location="global">particlemonitor.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>EnergyChart</class>
+   <extends>QWidget</extends>
+   <header location="global">energychart.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

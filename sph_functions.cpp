@@ -30,6 +30,8 @@ void InitSPH()
             {
                 float jitter = dist(gen); // Generar un valor aleatorio en el rango [0.0, 1.0] para introducir una variación de posición
                 newParticle(x + jitter, y, globalUi->Fluid_Menu->currentIndex());
+                particleSelected = false;
+                particlePointer = nullptr;
             }
             else
             {

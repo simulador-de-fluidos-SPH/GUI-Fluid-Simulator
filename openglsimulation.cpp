@@ -39,6 +39,8 @@ void OpenGLSimulation::initializeGL()
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE); // Configura como se aplica el color a los objetos
     glEnable(GL_COLOR_MATERIAL); // Habilita la capacidad de controlar los colores
 
+    this->resize(1000 - globalUi->dockWidget->width(), this->height()); // Se cambia el tamaño del widdget
+
     InitSPH(); // Se crean las parituclas de la simulación
 }
 
@@ -128,8 +130,6 @@ void OpenGLSimulation::resizeGL(int w, int h)
 
 }
 
-
-
 // -------------------------------------------- TOOLS -------------------------------------------- //
 
 // Función que se ejecutará cada que el mouse es presionado - Esto hay que adecuarlo a los botones
@@ -204,28 +204,22 @@ void OpenGLSimulation::mouseMoveEvent(QMouseEvent *e)
         float mag = (velocity * velocity.norm() * -1).norm() * proxRho / 100;
 
         globalUi->throwSpeed->setText(QString::number(mag, 'f', 2)); // Se asigna un valor a la casilla de velocidad de lanzamiento
+
+        // Calcula el ángulo en radianes
+        float angleRad = std::atan2(velocity.y(), velocity.x());
+
+        // Convierte el ángulo a grados
+        float angleDeg = angleRad * (180.0 / M_PI);
+
+        angleDeg = fmod(angleDeg + 360, 360);
+
+        globalUi->throwSpeed_Direction->setText(QString::number(angleDeg, 'f', 1));
+
     }
     if (mPressed)
     {
         newParticle(e->x(), height() - e->y(), globalUi->Fluid_Menu->currentIndex());
     }
-    /*{
-        // Calcula la distancia entre la posición actual y la posición de presionado
-        int deltaX = e->x() - mousePressPos.x();
-        int deltaY = e->y() - mousePressPos.y();
-
-        // Calcula la velocidad en función de la distancia y un factor de escala
-        float scale = 0.1f; // Ajusta este valor según la velocidad deseada
-        float velx = static_cast<float>(deltaX) * scale;
-        float vely = static_cast<float>(deltaY) * scale;
-
-        // Crea una nueva partícula con la posición inicial en el punto de clic
-        newParticle(e->x(), height() - e->y(), globalUi->Fluid_Menu->currentIndex());
-        // Asigna la velocidad a la última partícula en el vector
-        if (!particles.empty()) {
-            particles.back().v = Vector2d(velx, vely);
-        }
-    }*/
     if(deletePressed){
        deleteParticle(e);
     }
@@ -248,6 +242,7 @@ void OpenGLSimulation::mouseReleaseEvent(QMouseEvent *e)
        particlePointer = &particles.back();
        particleSelected = true;
        globalUi->throwSpeed->setText(QString::number(0, 'f', 2));
+       globalUi->throwSpeed_Direction->setText(QString::number(0, 'f', 1));
 
        launchPressed = false;
     }
@@ -358,7 +353,7 @@ void OpenGLSimulation::concentricForce(){
         pi.f = fpress + fvisc + fgrav;
 
         // Comprueba si la particula está suficientemente cerca del punto de click para ser afectada, de ser así, se añade la fuerza externa al cálculo
-        if ((pi.x - pos).norm() <= 2 * H)
+        if ((pi.x - pos).norm() <= 3 * H)
         {
             Vector2d externalForce;
             float angulo;

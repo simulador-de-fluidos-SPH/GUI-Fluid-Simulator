@@ -39,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Agregar la acción a la barra de herramientas "myToolBar"
     ui->toolBar->addAction(actionMenu);
+
 }
 
 MainWindow::~MainWindow()

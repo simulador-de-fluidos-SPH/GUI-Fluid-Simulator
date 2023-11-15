@@ -20,6 +20,13 @@ Vector2d pmz(30.f, 30.f);
 
 float proxRho = 0.012434f;
 
+// --- Energy --- //
+float kineticE;
+float potentialE;
+float mechanicalE;
+// -------------- //
+
+// --- TOOLS --- //
 bool concentricForceActive = false;
 float concentricForceMag = 10000.0f;
 QMouseEvent* mouseEvent;
@@ -28,6 +35,7 @@ bool deletePressed = false;
 bool launchPressed = false;
 Vector2d launchInitPos;
 Vector2d mouseMovePosition;
+// -------------- //
 
 // Valores por defecto
 float REST_DENS = props[0].REST_DENS;
