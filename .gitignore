@@ -1,1 +1,61 @@
+# Qt Creator user files
 *.pro.user
+*.pro.user.*
+
+# Build directories
+build/
+build-*/
+release/
+debug/
+
+# Qt generated files
+moc_*
+ui_*
+qrc_*
+Makefile*
+
+# Object files and libraries
+*.o
+*.obj
+*.so
+*.dylib
+*.dll
+*.a
+*.lib
+
+# Executables
+*.exe
+*.app
+fluid_simulator
+
+# Temporary files
+*~
+*.swp
+*.tmp
+*.bak
+
+# IDE and editor files
+.vscode/
+*.sublime-*
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+*.lnk
+
+# Debug information
+*.pdb
+*.ilk
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+
+# Compiler-specific
+*.gch
+*.pch
+
+# Log files
+*.log
